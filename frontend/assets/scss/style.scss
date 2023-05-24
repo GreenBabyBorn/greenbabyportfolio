@@ -1,0 +1,62 @@
+@use "sass:math";
+@use "@/assets/scss/variables" as *;
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800&display=swap");
+
+$fontFamily: "Nunito Sans";
+$fontSize: 1.2rem;
+
+$containerWidth: 940px;
+
+:root {
+  --bg-color: #f7fff7;
+  --bg-color-rgb: 247, 255, 247;
+  --text-color: black;
+  --text-color-rgb: 0, 0, 0;
+  --grey-bg-color: rgb(237, 237, 237);
+  --main-color: #00a550;
+}
+
+body {
+  color: var(--text-color);
+  background: var(--bg-color);
+  transition: background 0.3s ease 0s;
+}
+
+.dark-mode {
+  --bg-color: #060d05;
+  --bg-color-rgb: 6, 13, 5;
+  --text-color: white;
+  --text-color-rgb: 255, 255, 255;
+  --grey-bg-color: #777;
+}
+
+[class*="__container"] {
+  max-width: $containerWidth;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.wrapper {
+  min-height: 100vh;
+  display: grid;
+  overflow: hidden;
+  grid-template-rows: 1fr auto;
+  // padding-top: 68px;
+}
+.page {
+  .header + & {
+    margin-top: 3.6em;
+  }
+
+  // margin-bottom: 50px;
+  min-width: 0;
+}
+
+::selection {
+  background: #98fb98;
+}
+::-moz-selection {
+  background: #98fb98;
+}

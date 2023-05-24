@@ -1,0 +1,44 @@
+<template>
+  <button @click="handleClick" disabled class="form-btn"><slot /></button>
+</template>
+
+<script setup lang="ts">
+const emits = defineEmits(["onClick"]);
+function handleClick(event: Event) {
+  emits("onClick", event);
+}
+</script>
+
+<style scoped lang="scss">
+.form-btn {
+  font-size: 1rem;
+  background: var(--text-color);
+  color: var(--bg-color);
+  //   padding: 15px;
+  padding: 0.5em 0.75em;
+  border-radius: 70px;
+  font-weight: bold;
+  transition: all 0.3s ease 0s;
+
+  // border: 2px var(--text-color) solid;
+  &:disabled {
+    opacity: 0.2;
+  }
+  &:hover:enabled,
+  &:focus {
+    transition: all 0.3s ease 0s;
+    background: var(--bg-color);
+    color: var(--text-color);
+    // border: 2px var(--main-color) solid;
+    box-shadow: 0 0 0px 2px var(--main-color);
+    // outline: 1px black solid;
+  }
+  // &:focus {
+  //   // border: 2px solid var(--main-color);
+  //   box-shadow: 0 0 0px 2px var(--main-color);
+  // }
+  @media (max-width: 320px) {
+    width: 100%;
+  }
+}
+</style>
