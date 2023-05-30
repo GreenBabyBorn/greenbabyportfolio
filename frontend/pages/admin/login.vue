@@ -7,22 +7,27 @@
         <!-- {{ user.data.value ? "auth" : "not auth" }} -->
         <form class="login__form">
           <FormInput
-            v-model="username"
             name="username"
             type="text"
             placeholder="логин"
+            success-message="вроде, всё правильно"
+            :maxlength="10"
           />
+          {{}}
+          <!-- <span>{{ errors.username }}</span> -->
           <FormInput
-            v-model="password"
             name="password"
             type="password"
             placeholder="пароль"
+            success-message="тут тоже пока всё хорошо"
           />
+          <!-- <span>{{ errors.password }}</span> -->
           <!-- <button @click.prevent="logout">выйти</button> -->
           <FormButton
             type="submit"
             @click.prevent="submit"
             class="login__button"
+            :disabled="!meta.dirty || !meta.valid"
             >авторизоваться</FormButton
           >
         </form>
@@ -62,25 +67,63 @@ useHead({
   title: "greenbabylogin",
 });
 
-const username = ref("");
-const password = ref("");
+import {
+  useField,
+  useIsFieldValid,
+  useForm,
+  useIsFieldDirty,
+  useFieldValue,
+} from "vee-validate";
+
+const loginFormSchema = {
+  username(value: string) {
+    if (!value) {
+      return "мало букав";
+    }
+    if (value.length > 10) {
+      return "многа букав";
+    }
+    return true;
+  },
+  password(value: string) {
+    if (!value) {
+      return "это поле обязательно";
+    }
+    return true;
+  },
+};
+
+const { errors, useFieldModel, meta, validate, setErrors } = useForm({
+  validationSchema: loginFormSchema,
+
+  initialValues: {
+    username: "",
+    password: "",
+  },
+});
+// const [username, password] = useFieldModel(["username", "password"]);
+const { value: username } = useField("username");
+const { value: password } = useField("password");
 
 const { status, signIn } = useAuth();
 
 const submit = async () => {
-  const { error, url } = await signIn("credentials", {
-    username: username.value,
-    password: password.value,
-    callbackUrl: "/admin/dashboard",
-    redirect: false,
-  });
-  if (error) {
-    // Do your custom error handling here
-    alert("You have made a terrible mistake while entering your credentials");
-  } else {
-    // No error, continue with the sign in, e.g., by following the returned redirect:
-    console.log(url);
-    return navigateTo(url, { external: true });
+  if ((await validate()).valid) {
+    const { error, url } = await signIn("credentials", {
+      username: username.value,
+      password: password.value,
+      callbackUrl: "/admin/dashboard",
+      redirect: false,
+    });
+    if (error) {
+      setErrors({
+        username: "бро,",
+        password: "надо тренироваться",
+      });
+    } else {
+      console.log(url);
+      return navigateTo(url, { external: true });
+    }
   }
 };
 </script>
@@ -115,7 +158,7 @@ const submit = async () => {
     backdrop-filter: blur(10px);
 
     display: flex;
-    gap: 1rem;
+    // gap: 1rem;
     flex-direction: column;
     // border: 1px solid black;
     // padding: 20px;

@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleClick" disabled class="form-btn"><slot /></button>
+  <button @click="handleClick" class="form-btn"><slot /></button>
 </template>
 
 <script setup lang="ts">

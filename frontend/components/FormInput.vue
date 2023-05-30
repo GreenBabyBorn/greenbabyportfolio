@@ -1,30 +1,64 @@
 <template>
   <label :for="props.forid">
     {{ props.label }}
+    <!-- @input="(event: any) => emits('update:modelValue', event.target.value)" -->
     <input
-      :value="props.modelValue"
-      @input="(event: any) => emits('update:modelValue', event.target.value)"
+      :value="inputValue"
       :id="props.forid"
       :type="props.type"
       :name="props.name"
       :autofocus="props.autofocus"
       :placeholder="props.placeholder"
+      :class="{ error: errorMessage }"
+      :maxlength="props.maxlength"
+      @input="handleChange"
+      @blur="handleBlur"
     />
+    <p
+      :class="{ error: errorMessage }"
+      v-show="errorMessage || (meta.valid && meta.dirty)"
+    >
+      {{ errorMessage || successMessage }}
+    </p>
   </label>
 </template>
 
 <script setup lang="ts">
+import { useField } from "vee-validate";
+// interface Props {
+//   modelValue: string | null;
+//   label?: string;
+//   type: string;
+//   forid?: string;
+//   name?: string;
+//   autofocus?: boolean;
+//   placeholder?: string;
+//   error?: boolean | string;
+// }
 interface Props {
-  modelValue: string | null;
+  value?: string | null;
   label?: string;
   type: string;
   forid?: string;
-  name?: string;
+  name: string;
   autofocus?: boolean;
   placeholder?: string;
+  successMessage?: string;
+  maxlength?: number;
 }
 const props = defineProps<Props>();
-const emits = defineEmits(["update:modelValue"]);
+// const emits = defineEmits(["update:modelValue"]);
+const name = toRef(props.name);
+const {
+  value: inputValue,
+  errorMessage,
+  handleBlur,
+  handleChange,
+  meta,
+} = useField(name, undefined, {
+  initialValue: props.value,
+});
+
 // const props = defineProps({
 //   label: { type: String, required: false },
 //   type: { type: String, required: true },
@@ -34,10 +68,22 @@ const emits = defineEmits(["update:modelValue"]);
 </script>
 
 <style scoped lang="scss">
+p {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  color: var(--main-color);
+  &.error {
+    color: red;
+  }
+}
+
 label {
   display: flex;
   flex-direction: column;
   font-size: 1rem;
+  position: relative;
+  padding-bottom: 1.5rem;
 
   input {
     // background: var(--text-color);
@@ -49,6 +95,9 @@ label {
     }
     &:disabled {
       // border: 2px solid gray;
+    }
+    &.error {
+      box-shadow: 0 0 10px 2px red !important;
     }
     // background: none;
     margin-top: 3px;
