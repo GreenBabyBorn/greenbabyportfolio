@@ -61,69 +61,19 @@ const changeTheme = () => {
 </script>
 
 <style lang="scss" scoped>
-// #dark svg {
-//   fill: black;
-// }
-
 .color {
   display: flex;
   svg {
-    transition: all 0.3s ease 0s;
+    transition: svg 0.3s ease 0s;
     fill: black;
     width: 1.2em;
     height: 1.2em;
-    // @media screen and (max-width: 767px) {
-    //   width: 30px;
-    //   height: 30px;
-    // }
   }
 
   &:focus-visible svg {
-    fill: white;
-    // box-shadow: 0 0 10px 2px white;
+    // fill: white;
+    // outline: 2px solid green;
+    box-shadow: 0 0 0px 2px white;
   }
 }
-
-// .color {
-//   &__list {
-//     display: flex;
-//     gap: 15px;
-//   }
-//   &__item {
-//     // &.active#dark svg {
-//     //   fill: black;
-//     // }
-//     &.active {
-//       &#dark svg path {
-//         fill: rgb(60, 60, 60);
-//       }
-//       &#light svg path {
-//         fill: rgb(255, 255, 157);
-//       }
-//       &#system svg path {
-//         fill: rgba(0, 0, 0, 0.505);
-//       }
-//     }
-//     cursor: pointer;
-//     svg {
-//       transition: all 0.3s ease 0s;
-//       fill: white;
-//       width: 24px;
-//       height: 24px;
-//     }
-//   }
-// }
-// ul {
-//   display: flex;
-//   flex-direction: row;
-// }
-// li {
-//   &.active {
-//     color: black;
-//   }
-//   cursor: pointer;
-//   &:not(:last-child) {
-//     margin-right: 8px;
-//   }
-// }
 </style>

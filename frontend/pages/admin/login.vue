@@ -25,13 +25,13 @@
           <!-- <button @click.prevent="logout">выйти</button> -->
           <FormButton
             type="submit"
-            @click.prevent="submit"
+            @click.prevent="submitHandle"
             class="login__button"
             :disabled="!meta.dirty || !meta.valid"
             >авторизоваться</FormButton
           >
         </form>
-        <ColorToggle class="footer__color"></ColorToggle>
+        <!-- <ColorToggle class="footer__color"></ColorToggle> -->
         <NuxtLink class="login__return" to="/"
           ><svg
             xmlns="http://www.w3.org/2000/svg"
@@ -101,13 +101,13 @@ const { errors, useFieldModel, meta, validate, setErrors } = useForm({
     password: "",
   },
 });
-// const [username, password] = useFieldModel(["username", "password"]);
-const { value: username } = useField("username");
-const { value: password } = useField("password");
+const [username, password] = useFieldModel(["username", "password"]);
+// const { value: username } = useField("username");
+// const { value: password } = useField("password");
 
 const { status, signIn } = useAuth();
 
-const submit = async () => {
+const submitHandle = async () => {
   if ((await validate()).valid) {
     const { error, url } = await signIn("credentials", {
       username: username.value,
@@ -121,7 +121,7 @@ const submit = async () => {
         password: "надо тренироваться",
       });
     } else {
-      console.log(url);
+      // console.log(url);
       return navigateTo(url, { external: true });
     }
   }
@@ -158,7 +158,7 @@ const submit = async () => {
     backdrop-filter: blur(10px);
 
     display: flex;
-    // gap: 1rem;
+    // gap: 0.3rem;
     flex-direction: column;
     // border: 1px solid black;
     // padding: 20px;

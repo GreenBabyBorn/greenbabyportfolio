@@ -72,7 +72,7 @@ const deletePost = async () => {
   //  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
   border-radius: 1.25rem;
   // border: 2px solid var(--text-color);
-  box-shadow: 0px 0px 30px 1px #3c3939;
+  // box-shadow: 0px 0px 30px 1px #3c3939;
   &__body {
     display: flex;
 

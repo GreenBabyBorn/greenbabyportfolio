@@ -6,16 +6,25 @@
       @dragleave="dragLeave"
       @click.prevent="openFile"
       class="select-file__btn"
-      :class="{ active: dragActive }"
+      :class="{ active: dragActive, error: errorMessage }"
     >
       <span>Выберите файл</span>
       <p>{{ dragBtnText }}</p>
+      <p
+        :class="{ error: errorMessage }"
+        v-show="errorMessage || (meta.valid && meta.dirty)"
+      >
+        {{ errorMessage || successMessage }}
+      </p>
     </button>
 
     <input
       @change.prevent="changeInput"
       hidden
       ref="fileInput"
+      @input="handleChange"
+      @blur="handleBlur"
+      :name="props.name"
       type="file"
       id="file"
       accept=".jpg, .jpeg, .png"
@@ -24,6 +33,13 @@
 </template>
 
 <script setup lang="ts">
+import { useField } from "vee-validate";
+interface Props {
+  name: string;
+  successMessage?: string;
+}
+const props = defineProps<Props>();
+
 let emit = defineEmits([
   "srcPhoto",
   "filePhoto",
@@ -36,6 +52,18 @@ let emit = defineEmits([
 const fileInput = ref<HTMLInputElement | null>(null);
 let srcPhoto = useState<string | null>("srcPhoto");
 let filePhoto = useState<any>();
+
+const name = toRef(props.name);
+const {
+  value: inputValue,
+  errorMessage,
+  handleBlur,
+  handleChange,
+
+  meta,
+} = useField(name, undefined, {
+  initialValue: srcPhoto.value,
+});
 
 let dragActive = ref(false);
 let dragBtnText = ref("... или перетащите файл");
@@ -71,6 +99,7 @@ let changeInput = (event: any) => {
     const reader = new FileReader();
     reader.onload = (ev: any) => {
       srcPhoto.value = ev.target.result;
+      inputValue.value = srcPhoto.value;
       emit("srcPhoto", srcPhoto.value);
     };
     reader.readAsDataURL(file);
@@ -87,6 +116,7 @@ let removePhoto = () => {
   }
   dragBtnText.value = "... или перетащите файл";
   srcPhoto.value = null;
+  inputValue.value = srcPhoto.value;
   emit("srcPhoto", srcPhoto.value);
 };
 
@@ -94,6 +124,17 @@ emit("dragAndDrop", dragAndDrop);
 emit("dragOver", dragOver);
 emit("dragLeave", dragLeave);
 emit("removePhoto", removePhoto);
+
+// const name = toRef(props.name);
+// const {
+//   value: inputValue,
+//   errorMessage,
+//   handleBlur,
+//   handleChange,
+//   meta,
+// } = useField(name, undefined, {
+//   initialValue: props.value,
+// });
 </script>
 
 <style scoped lang="scss">
@@ -110,10 +151,14 @@ emit("removePhoto", removePhoto);
     gap: 1em;
     flex-direction: column;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 15px;
     border: 2px var(--main-color) dashed;
     padding: 1.8em;
     transition: background 0.3s ease 0s;
+    &.error {
+      // background: #ffecec;
+      border: 2px red dashed;
+    }
     &:focus {
       // outline: 3px solid #00a550;
       border: 2px var(--main-color) solid;
@@ -128,6 +173,9 @@ emit("removePhoto", removePhoto);
     &.active {
       border: 2px var(--main-color) solid;
       background: #00a55042;
+    }
+    .error {
+      color: red;
     }
   }
 }

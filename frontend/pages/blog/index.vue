@@ -1,24 +1,24 @@
 <template>
   <div>
     <div class="blog">
-      <div class="blog__container">
-        {{ !postsStore.posts.length ? "Постов нет.." + "" : "" }}
-        <TransitionGroup tag="div" name="fade" class="blog__container">
-          <PreviewPost
-            v-for="post in postsStore.posts"
-            :key="post.id"
-            :link="'/blog/' + post.slug"
-            :title="post.title"
-            :mdContent="post.mdContent"
-            :rawContent="post.rawContent"
-            :date="post.createdAt"
-            :imgsrc="'http://localhost:3001/api/' + post.photo"
-            :isAuth="status == 'authenticated' ? true : false"
-            :slug="post.slug"
-            :post="post"
-          />
-        </TransitionGroup>
-      </div>
+      <!-- <div class="blog__container"> -->
+      <TransitionGroup tag="div" name="fade" class="blog__container">
+        <h2>{{ !postsStore.posts.length ? "Постов нет" + "" : "" }}</h2>
+        <PreviewPost
+          v-for="post in postsStore.posts"
+          :key="post.id"
+          :link="'/blog/' + post.slug"
+          :title="post.title"
+          :mdContent="post.mdContent"
+          :rawContent="post.rawContent"
+          :date="post.createdAt"
+          :imgsrc="'http://localhost:3001/api/' + post.photo"
+          :isAuth="status == 'authenticated' ? true : false"
+          :slug="post.slug"
+          :post="post"
+        />
+      </TransitionGroup>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ const { data: posts, error }: any = await useFetch(
   "http://localhost:3001/api/posts"
 );
 postsStore.posts = posts.value;
-console.log(postsStore.getPosts);
+// console.log(postsStore.getPosts);
 </script>
 
 <style scoped lang="scss">

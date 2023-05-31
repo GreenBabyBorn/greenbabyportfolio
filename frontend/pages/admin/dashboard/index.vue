@@ -7,38 +7,46 @@
           <FormInput
             class="post-form__title"
             v-model="postTitle"
-            name="title"
+            name="postTitle"
             forid="title"
             type="text"
-            label="Заголовок"
+            placeholder="Заголовок"
             :autofocus="true"
+            success-message="всё так"
           />
+          <!-- label="Заголовок" -->
           <client-only>
             <FormTextarea
               v-model="previewMD"
-              forid="textarea"
-              name="textarea"
-              label="Содержание поста"
+              forid="previewMD"
+              name="previewMD"
+              placeholder="Содержание поста"
               class="post-form__textarea"
               rows="8"
+              success-message="всё так"
             ></FormTextarea>
+            <!-- label="Содержание поста" -->
 
             <FormTextarea
               v-model="rawContent"
-              forid="textarea"
-              name="textarea"
-              label="Краткое описание"
+              forid="rawContent"
+              name="rawContent"
+              placeholder="Краткое описание"
               class="post-form__textarea"
+              success-message="всё так"
             ></FormTextarea>
+            <!-- label="Краткое описание" -->
           </client-only>
           <FormInput
             class="post-form__slug"
             v-model="postSlug"
-            name="slug"
+            name="postSlug"
+            placeholder="Слаг"
             forid="slug"
             type="text"
-            label="Слаг"
+            success-message="всё так"
           />
+          <!-- label="Слаг" -->
           <div class="post-form__photo">
             <SelectFile
               @file-photo="(e) => (filePhoto = e)"
@@ -47,9 +55,15 @@
               @drag-leave="(e) => (dragLeave = e)"
               @drag-over="(e) => (dragOver = e)"
               @remove-photo="(e) => (removePhoto = e)"
+              name="selectFile"
+              success-message="фото успешно выбрано"
             ></SelectFile>
           </div>
-          <FormButton @click.prevent="submit" class="post-form__btn"
+          <FormButton
+            type="submit"
+            @click.prevent="submitHandle"
+            class="post-form__btn"
+            :disabled="!meta.dirty || !meta.valid"
             >Создать</FormButton
           >
         </form>
@@ -76,7 +90,7 @@
             </div>
           </Transition>
           <div
-            v-if="postContent"
+            v-show="postContent"
             class="post-preview__content"
             v-html="postContent"
             id="post__content"
@@ -102,11 +116,66 @@ definePageMeta({
   middleware: "auth",
 });
 
-const postTitle = ref("");
-const postSlug = ref("");
+import {
+  useField,
+  useIsFieldValid,
+  useForm,
+  useIsFieldDirty,
+  useFieldValue,
+} from "vee-validate";
+
+const createPostFormSchema = {
+  postTitle(value: string) {
+    if (!value) return "мало букав";
+
+    return true;
+  },
+  postSlug(value: string) {
+    if (!value) return "это поле обязательно";
+
+    return true;
+  },
+  previewMD(value: string) {
+    if (!value) return "это поле обязательно";
+
+    return true;
+  },
+  rawContent(value: string) {
+    if (!value) return "это поле обязательно";
+
+    return true;
+  },
+  selectFile(value: string) {
+    if (!value) return "фото обязательно";
+
+    return true;
+  },
+};
+
+const { errors, useFieldModel, meta, validate, setErrors } = useForm({
+  validationSchema: createPostFormSchema,
+
+  initialValues: {
+    postTitle: "",
+    postSlug: "",
+    previewMD: "",
+    rawContent: "",
+    selectFile: "",
+  },
+});
+const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
+  "postTitle",
+  "postSlug",
+  "previewMD",
+  "rawContent",
+  "selectFile",
+]);
+
+// const postTitle = ref("");
+// const postSlug = ref("");
 const postContent = ref("");
-const rawContent = ref("");
-const previewMD = ref("");
+// const rawContent = ref("");
+// const previewMD = ref("");
 
 let srcPhoto = useState<string | null>("srcPhoto");
 let filePhoto = useState<any>();
@@ -116,7 +185,7 @@ let dragOver = () => {};
 let removePhoto = () => {};
 const { getSession } = useAuth();
 // console.log(await getSession());
-const submit = async () => {
+const submitHandle = async () => {
   let formData = new FormData();
 
   formData.append("photo", filePhoto.value);
@@ -203,7 +272,10 @@ watch(postTitle, () => {
 .post-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  // gap: 20px;
+  &__btn {
+    margin-top: 20px;
+  }
 
   &__photo-preview {
     position: relative;
