@@ -7,7 +7,7 @@ pipeline {
 
         stage('Test'){
             steps {
-               echo 'dev test ci/cd'
+               echo '2 dev test ci/cd'
             }
         }
 
