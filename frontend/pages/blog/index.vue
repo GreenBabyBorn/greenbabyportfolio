@@ -12,7 +12,7 @@
           :mdContent="post.mdContent"
           :rawContent="post.rawContent"
           :date="post.createdAt"
-          :imgsrc="'http://localhost:3001/api/' + post.photo"
+          :imgsrc="`${config.public.restApiUrl}/` + post.photo"
           :isAuth="status == 'authenticated' ? true : false"
           :slug="post.slug"
           :post="post"
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { TransitionGroup } from "vue";
 import { usePostsStore } from "~/stores/posts";
-
+const config = useRuntimeConfig();
 useHead({
   title: "greenbabyblog",
   meta: [{ name: "description", content: "зёленый родился блог" }],
@@ -36,7 +36,7 @@ const postsStore = usePostsStore();
 const { status } = useAuth();
 
 const { data: posts, error }: any = await useFetch(
-  "http://localhost:3001/api/posts"
+  `${config.public.restApiUrl}/posts`
 );
 postsStore.posts = posts.value;
 </script>

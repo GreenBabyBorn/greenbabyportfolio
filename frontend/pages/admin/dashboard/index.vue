@@ -120,6 +120,8 @@ import {
   useFieldValue,
 } from "vee-validate";
 
+const config = useRuntimeConfig();
+
 useHead({
   title: "greenbabydashboard",
   meta: [{ name: "description", content: "зёленый родился блог" }],
@@ -205,7 +207,7 @@ const submitHandle = async () => {
   formData.append("rawContent", rawContent.value);
   formData.append("mdContent", postContent.value);
   const { data, error }: any = await useFetch(
-    "http://localhost:3001/api/posts",
+    `${config.public.restApiUrl}/posts`,
     {
       method: "POST",
       body: formData,

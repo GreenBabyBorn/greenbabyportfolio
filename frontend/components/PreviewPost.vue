@@ -42,6 +42,8 @@ interface Props {
 //   // @ts-ignore
 //   // middleware: "auth",
 // });
+const config = useRuntimeConfig();
+
 const notificationStore = useNotificationStore();
 const props = defineProps<Props>();
 
@@ -50,7 +52,7 @@ const postsStore = usePostsStore();
 const { getSession } = useAuth();
 const deletePost = async () => {
   const { data, error }: any = await useFetch(
-    "http://localhost:3001/api/posts/" + props.slug,
+    `${config.public.restApiUrl}/posts` + props.slug,
     {
       method: "DELETE",
       headers: {

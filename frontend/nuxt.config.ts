@@ -1,12 +1,10 @@
 import { defineNuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
-  // runtimeConfig: {
-  //   // The private keys which are only available server-side
-  //   // Keys within public are also exposed client-side
-  //   // public: {
-  //   //   restApiUrl: "",
-  //   // },
-  // },
+  runtimeConfig: {
+    public: {
+      restApiUrl: "http://localhost:3001/api",
+    },
+  },
   ssr: true,
 
   app: {

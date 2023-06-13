@@ -3,13 +3,15 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NuxtAuthHandler } from "#auth";
 import jwt_decode from "jwt-decode";
 
+const config = useRuntimeConfig();
+
 async function refreshAccessToken(refreshToken: string) {
   try {
     console.warn("trying to post to refresh token");
     const refreshedTokens = await $fetch<{
       refresh_token: string;
       access_token: string;
-    } | null>("http://localhost:3001/api/auth/refresh", {
+    } | null>(`${config.public.restApiUrl}/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +42,7 @@ export default NuxtAuthHandler({
   events: {
     async signOut({ token }) {
       console.log("qweqweqwe", token.accessToken);
-      return await $fetch("http://localhost:3001/api/auth/logout", {
+      return await $fetch(`${config.public.restApiUrl}/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +117,7 @@ export default NuxtAuthHandler({
           const userTokens = await $fetch<{
             access_token: string;
             refresh_token: string;
-          } | null>("http://localhost:3001/api/auth/signin", {
+          } | null>(`${config.public.restApiUrl}/auth/signin`, {
             method: "POST",
             body: payload,
             headers: {
