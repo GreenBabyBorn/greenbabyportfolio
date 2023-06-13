@@ -111,6 +111,14 @@
 import Markdown from "markdown-it";
 import { ref, watch } from "vue";
 import slugify from "slugify";
+import { useNotificationStore } from "~/stores/notifications";
+import {
+  useField,
+  useIsFieldValid,
+  useForm,
+  useIsFieldDirty,
+  useFieldValue,
+} from "vee-validate";
 
 useHead({
   title: "greenbabydashboard",
@@ -122,13 +130,7 @@ definePageMeta({
   middleware: "auth",
 });
 
-import {
-  useField,
-  useIsFieldValid,
-  useForm,
-  useIsFieldDirty,
-  useFieldValue,
-} from "vee-validate";
+const notificationStore = useNotificationStore();
 
 const createPostFormSchema = {
   postTitle(value: string) {
@@ -216,7 +218,7 @@ const submitHandle = async () => {
 
   if (data) {
     useRouter().push({ path: "/blog/" + data.value?.slug });
-    pushNotification({
+    notificationStore.pushNotification({
       title: "Великолепно!",
       status: true,
       text: "Пост успешно добавлен 👌",

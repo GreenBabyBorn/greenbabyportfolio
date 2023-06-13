@@ -5,19 +5,10 @@
         <NuxtLink class="post__title" :to="props.link">{{
           props.title
         }}</NuxtLink>
-        <!-- <a :href="" class="post__title"></a> -->
         <div class="post__text">{{ rawContent }}</div>
         <div v-if="props.isAuth" class="post__manage">
           <FormButton class="post__edit" @click="handleEdit">✏️</FormButton>
           <FormButton class="post__remove" @click="deletePost()">❌</FormButton>
-          <!-- <button class="post__edit" v-if="props.isAuth" @click=""></button> -->
-          <!-- <button
-            class="post__remove"
-            v-if="props.isAuth"
-            @click="deletePost()"
-          >
-            ❌
-          </button> -->
         </div>
 
         <!-- <span class="post__date">{{ props.date }}</span> -->
@@ -30,6 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import { useNotificationStore } from "~/stores/notifications";
+import { usePostsStore, Post } from "~/stores/posts";
+
 interface Props {
   title: string;
   mdContent: string;
@@ -43,22 +37,13 @@ interface Props {
   post?: object;
 }
 
-definePageMeta({
-  // layout: "admin",
-  // @ts-ignore
-  middleware: "auth",
-});
-
+// definePageMeta({
+//   // layout: "admin",
+//   // @ts-ignore
+//   // middleware: "auth",
+// });
+const notificationStore = useNotificationStore();
 const props = defineProps<Props>();
-// console.log(props.isAuth);
-// const { useUser, getUser } = useAuth();
-// await useUser().execute();
-// const user = await getUser();
-// user.execute();
-// const user = await getUser();
-// console.log(user);
-
-import { usePostsStore } from "~/stores/posts";
 
 const postsStore = usePostsStore();
 
@@ -74,7 +59,12 @@ const deletePost = async () => {
       },
     }
   );
-  postsStore.removePost(props.post);
+  postsStore.removePost(props.post as Post);
+  notificationStore.pushNotification({
+    title: "Всё прошло гладко",
+    status: true,
+    text: "Пост успешно удален!",
+  });
 };
 const handleEdit = () => {
   useRouter().push({ path: "/blog/edit/" + props.slug });
@@ -82,20 +72,10 @@ const handleEdit = () => {
 </script>
 
 <style scoped lang="scss">
-// @use "@/assets/scss/mixins" as *;
 .post {
-  // box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.5),
-  //   10px 10px 15px rgba(112, 172, 134, 0.12);
-  // padding: 50px 40px;
-  //   border: 1px solid green;
-  //  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
   border-radius: 1.25rem;
-  // border: 2px solid var(--text-color);
-  // box-shadow: 0px 0px 30px 1px #3c3939;
   &__body {
     display: flex;
-
-    // gap: 20px;
     @media (max-width: 720px) {
       flex-direction: column-reverse;
     }
@@ -110,16 +90,7 @@ const handleEdit = () => {
   &__title {
     font-weight: bold;
     font-size: 42px;
-
-    // word-wrap: break-word;
-    // overflow-wrap: break-word;
     word-break: break-all;
-    // hyphens: auto;
-    // overflow-wrap: anywhere;
-    a {
-      // hyphens: auto;
-      // overflow-wrap: break-word;
-    }
     &:hover,
     &:focus {
       text-decoration: underline;
@@ -133,10 +104,8 @@ const handleEdit = () => {
     line-height: normal;
     color: #888;
     word-break: break-all;
-    // font-family: Consolas;
   }
   &__date {
-    // font-style: italic;
     color: #888;
     font-size: 16px;
     margin-top: auto;
@@ -144,22 +113,11 @@ const handleEdit = () => {
     justify-self: flex-end;
   }
   &__remove {
-    // align-self: flex-start;
-    // padding: 10px 15px;
-    // border-radius: 10px;
-    // transition: all 0.3s ease 0s;
-    // color: red;
-    // box-shadow: 0 0 1px 2px red;
-    // background: transparent;
   }
   &__img {
     flex: 1 0 50%;
-
-    // height: 250px;
-    // width: 250px;
     & img {
       object-fit: cover;
-      // border-radius: 25px;
       border-bottom-right-radius: 1.25rem;
       border-top-right-radius: 1.25rem;
       width: 100%;

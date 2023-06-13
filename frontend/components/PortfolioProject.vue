@@ -29,8 +29,6 @@ const props = defineProps<Props>();
 
 <style scoped lang="scss">
 .project {
-  // border: 2px solid #45c182;
-  //     border-radius: 20px;
   &__url {
     &:hover img {
       filter: brightness(0.5);

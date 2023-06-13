@@ -13,6 +13,7 @@
     "@types/dateformat": "^5.0.0",
     "@types/formidable": "^2.0.5",
     "@types/markdown-it": "^12.2.3",
+    "@types/uuid": "^9.0.2",
     "nuxt": "^3.3.3",
     "sass": "^1.60.0"
   },

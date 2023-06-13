@@ -1,8 +1,6 @@
 <template>
   <label :for="props.forid">
     <span v-if="props.label">{{ props.label }}</span>
-
-    <!-- @input="(event: any) => emits('update:modelValue', event.target.value)" -->
     <textarea
       :value="inputValue"
       :name="props.name"
@@ -24,13 +22,6 @@
   </label>
 </template>
 <script setup lang="ts">
-// interface Props {
-//   modelValue: string | number | string[] | undefined;
-//   label?: string;
-//   name: string;
-//   forid: string;
-//   rows?: string;
-// }
 import { useField } from "vee-validate";
 interface Props {
   value?: string | number | string[] | undefined;
@@ -53,8 +44,6 @@ const {
 } = useField(name, undefined, {
   initialValue: props.value,
 });
-
-// const emits = defineEmits(["update:modelValue"]);
 </script>
 <style scoped lang="scss">
 label {
@@ -67,11 +56,7 @@ label {
   }
 
   textarea {
-    // margin: 2px;
-    // border: 2px solid black;
     font-family: inherit;
-    //   outline: 1px solid black;
-    // margin-top: 10px;
     resize: vertical;
     width: 100%;
     border-radius: 15px;
@@ -79,12 +64,8 @@ label {
     transition: box-shadow 0.3s ease 0s;
     background: #f7fff7;
     box-shadow: 0 0 0px 2px var(--text-color);
-
-    // box-shadow: 0 0 1px 2px var(--main-color);
     &:focus {
-      // border: 2px solid var(--main-color);
       box-shadow: 0 0 0px 2px var(--main-color);
-      //  outline: 3px solid #00a550;
     }
     &.error {
       box-shadow: 0 0 0px 2px red !important;

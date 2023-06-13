@@ -50,7 +50,6 @@ const themes = ["dark", "system", "light"];
 
 let count = ref(0);
 const changeTheme = () => {
-  // console.log(counter());
   count.value = (count.value + 1) % 3;
   colorMode.preference = themes[count.value];
 };

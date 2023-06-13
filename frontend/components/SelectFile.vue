@@ -79,9 +79,6 @@ const dragLeave = () => {
 
 const dragAndDrop = (e: DragEvent) => {
   changeInput(e.dataTransfer?.files);
-  // dragBtnText.value = filePhoto.value?.name;
-  // dragActive.value = false;
-  // console.log(e.dataTransfer?.files);
 };
 
 const openFile = () => {
@@ -122,25 +119,11 @@ emit("dragAndDrop", dragAndDrop);
 emit("dragOver", dragOver);
 emit("dragLeave", dragLeave);
 emit("removePhoto", removePhoto);
-
-// const name = toRef(props.name);
-// const {
-//   value: inputValue,
-//   errorMessage,
-//   handleBlur,
-//   handleChange,
-//   meta,
-// } = useField(name, undefined, {
-//   initialValue: props.value,
-// });
 </script>
 
 <style scoped lang="scss">
 .select-file {
-  // width: 100%;
   text-overflow: ellipsis;
-  /* width: 100%; */
-  // white-space: nowrap;
   overflow: hidden;
   &__btn {
     font-size: 1rem;
@@ -154,11 +137,9 @@ emit("removePhoto", removePhoto);
     padding: 1.8em;
     transition: background 0.3s ease 0s;
     &.error {
-      // background: #ffecec;
       border: 2px red dashed;
     }
     &:focus {
-      // outline: 3px solid #00a550;
       border: 2px var(--main-color) solid;
     }
     span {
