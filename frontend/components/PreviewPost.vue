@@ -7,9 +7,19 @@
         }}</NuxtLink>
         <!-- <a :href="" class="post__title"></a> -->
         <div class="post__text">{{ rawContent }}</div>
-        <button class="post__remove" v-if="props.isAuth" @click="deletePost()">
-          Удалить
-        </button>
+        <div v-if="props.isAuth" class="post__manage">
+          <FormButton class="post__edit" @click="handleEdit">✏️</FormButton>
+          <FormButton class="post__remove" @click="deletePost()">❌</FormButton>
+          <!-- <button class="post__edit" v-if="props.isAuth" @click=""></button> -->
+          <!-- <button
+            class="post__remove"
+            v-if="props.isAuth"
+            @click="deletePost()"
+          >
+            ❌
+          </button> -->
+        </div>
+
         <!-- <span class="post__date">{{ props.date }}</span> -->
       </div>
       <NuxtLink :to="props.link" class="post__img">
@@ -32,6 +42,12 @@ interface Props {
   slug?: string;
   post?: object;
 }
+
+definePageMeta({
+  // layout: "admin",
+  // @ts-ignore
+  middleware: "auth",
+});
 
 const props = defineProps<Props>();
 // console.log(props.isAuth);
@@ -60,6 +76,9 @@ const deletePost = async () => {
   );
   postsStore.removePost(props.post);
 };
+const handleEdit = () => {
+  useRouter().push({ path: "/blog/edit/" + props.slug });
+};
 </script>
 
 <style scoped lang="scss">
@@ -82,8 +101,8 @@ const deletePost = async () => {
     }
   }
   &__content {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr 1fr auto;
     flex: 0 0 50%;
     padding: 30px 30px 30px 30px;
     gap: 20px;
@@ -91,11 +110,24 @@ const deletePost = async () => {
   &__title {
     font-weight: bold;
     font-size: 42px;
-    // @include adaptiveValue("font-size", 42, 32);
-    // padding-bottom: 15px;
-    &:hover {
+
+    // word-wrap: break-word;
+    // overflow-wrap: break-word;
+    word-break: break-all;
+    // hyphens: auto;
+    // overflow-wrap: anywhere;
+    a {
+      // hyphens: auto;
+      // overflow-wrap: break-word;
+    }
+    &:hover,
+    &:focus {
       text-decoration: underline;
     }
+  }
+  &__manage {
+    display: flex;
+    justify-content: space-around;
   }
   &__text {
     line-height: normal;
@@ -112,13 +144,13 @@ const deletePost = async () => {
     justify-self: flex-end;
   }
   &__remove {
-    align-self: flex-start;
-    padding: 10px 15px;
-    border-radius: 10px;
-    transition: all 0.3s ease 0s;
-    color: red;
-    box-shadow: 0 0 1px 2px red;
-    background: transparent;
+    // align-self: flex-start;
+    // padding: 10px 15px;
+    // border-radius: 10px;
+    // transition: all 0.3s ease 0s;
+    // color: red;
+    // box-shadow: 0 0 1px 2px red;
+    // background: transparent;
   }
   &__img {
     flex: 1 0 50%;

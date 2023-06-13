@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     rootId: "green",
     head: {
       meta: [
-        { name: "description", content: "Сайт портфолио GreenBabyBorn" },
+        { name: "description", content: "лаборатория greenbabyborn'a" },
         {
           name: "keywords",
           content:

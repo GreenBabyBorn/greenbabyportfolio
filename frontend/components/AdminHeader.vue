@@ -29,7 +29,6 @@
 
 <script setup>
 const { signOut } = useAuth();
-// const user = await getUser();
 const logoutHandle = async () => {
   await signOut({ callbackUrl: "/admin/login" });
 };
@@ -41,7 +40,6 @@ const logoutHandle = async () => {
   // transition: all 0.3s ease 0s;
 }
 .header {
-  // padding-top: 68px;
   transition: 0.3s ease 0s;
   transition-property: background, opacity;
   position: fixed;
@@ -52,9 +50,6 @@ const logoutHandle = async () => {
   z-index: 50;
   backdrop-filter: blur(10px);
   background: rgba(var(--bg-color-rgb), 0.4);
-  // background: var(--bg-color);
-  // box-shadow: -10px -10px 10px rgba(255, 255, 255, 0.5),
-  // 10px 10px 10px rgba(70, 70, 70, 0.12);
 
   &__container {
     display: flex;
@@ -74,9 +69,6 @@ const logoutHandle = async () => {
   &__item {
     .router-link-active {
       color: var(--main-color);
-      // border-bottom: 2px solid #98fb98;
-      // text-shadow: 0px 0px 8px #24ff00;
-      // border-bottom: 1px #45c182 solid;
     }
   }
   &__link {

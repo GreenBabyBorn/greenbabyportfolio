@@ -2,21 +2,10 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <AppNotification> </AppNotification>
 </template>
 
-<script setup lang="ts">
-// definePageMeta({
-//   middleware: "init-auth",
-// });
-// const { getUser } = useAuth();
-
-// onServerPrefetch(() => {
-//   initAuth();
-// });
-// onBeforeMount(async () => {
-//   await getUser();
-// });
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss">
 @use "@/assets/scss/null" as *;

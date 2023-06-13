@@ -60,13 +60,14 @@ const {
 label {
   font-size: 1rem;
   position: relative;
-  padding-bottom: 30px;
+  padding-bottom: 32px;
 
   span {
     margin-bottom: 10px;
   }
 
   textarea {
+    // margin: 2px;
     // border: 2px solid black;
     font-family: inherit;
     //   outline: 1px solid black;
@@ -78,6 +79,7 @@ label {
     transition: box-shadow 0.3s ease 0s;
     background: #f7fff7;
     box-shadow: 0 0 0px 2px var(--text-color);
+
     // box-shadow: 0 0 1px 2px var(--main-color);
     &:focus {
       // border: 2px solid var(--main-color);
@@ -92,8 +94,10 @@ label {
 
   p {
     position: absolute;
-    bottom: 7px;
+    bottom: 0px;
     left: 0;
+    display: inline-block;
+    padding: 8px 0;
     color: var(--main-color);
 
     &.error {

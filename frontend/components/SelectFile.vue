@@ -47,6 +47,7 @@ let emit = defineEmits([
   "dragOver",
   "dragLeave",
   "removePhoto",
+  "dragBtnText",
 ]);
 
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -67,19 +68,16 @@ const {
 
 let dragActive = ref(false);
 let dragBtnText = ref("... или перетащите файл");
-let dragOver = () => {
+const dragOver = () => {
   dragActive.value = true;
   dragBtnText.value = "Отпустите";
-
-  // console.log(dragBtnText);
 };
-let dragLeave = () => {
+const dragLeave = () => {
   dragActive.value = false;
   dragBtnText.value = "... или перетащите файл";
-  // console.log(2);
 };
 
-let dragAndDrop = (e: DragEvent) => {
+const dragAndDrop = (e: DragEvent) => {
   changeInput(e.dataTransfer?.files);
   // dragBtnText.value = filePhoto.value?.name;
   // dragActive.value = false;
@@ -116,8 +114,8 @@ let removePhoto = () => {
   }
   dragBtnText.value = "... или перетащите файл";
   srcPhoto.value = null;
-  inputValue.value = srcPhoto.value;
   emit("srcPhoto", srcPhoto.value);
+  inputValue.value = srcPhoto.value;
 };
 
 emit("dragAndDrop", dragAndDrop);

@@ -2,8 +2,8 @@
   <div>
     <div class="blog">
       <!-- <div class="blog__container"> -->
+      <!-- <h2>{{ !postsStore.posts.length ? "Постов нет" + "" : "" }}</h2> -->
       <TransitionGroup tag="div" name="fade" class="blog__container">
-        <h2>{{ !postsStore.posts.length ? "Постов нет" + "" : "" }}</h2>
         <PreviewPost
           v-for="post in postsStore.posts"
           :key="post.id"
@@ -27,18 +27,18 @@
 import { TransitionGroup } from "vue";
 import { usePostsStore } from "~/stores/posts";
 
-const postsStore = usePostsStore();
 useHead({
   title: "greenbabyblog",
   meta: [{ name: "description", content: "зёленый родился блог" }],
 });
+
+const postsStore = usePostsStore();
 const { status } = useAuth();
-// console.log(status.value);
+
 const { data: posts, error }: any = await useFetch(
   "http://localhost:3001/api/posts"
 );
 postsStore.posts = posts.value;
-// console.log(postsStore.getPosts);
 </script>
 
 <style scoped lang="scss">

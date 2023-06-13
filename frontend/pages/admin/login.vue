@@ -10,7 +10,7 @@
             name="username"
             type="text"
             placeholder="логин"
-            success-message="вроде, всё правильно"
+            success-message="✔️ вроде, всё правильно"
             :maxlength="10"
           />
           {{}}
@@ -19,7 +19,7 @@
             name="password"
             type="password"
             placeholder="пароль"
-            success-message="тут тоже пока всё хорошо"
+            success-message="✔️ надеюсь не ошибся"
           />
           <!-- <span>{{ errors.password }}</span> -->
           <!-- <button @click.prevent="logout">выйти</button> -->
@@ -78,16 +78,16 @@ import {
 const loginFormSchema = {
   username(value: string) {
     if (!value) {
-      return "мало букав";
+      return "❌ мало букав";
     }
     if (value.length > 10) {
-      return "многа букав";
+      return "❌ многа букав";
     }
     return true;
   },
   password(value: string) {
     if (!value) {
-      return "это поле обязательно";
+      return "❌ без пароля никак";
     }
     return true;
   },
@@ -106,7 +106,8 @@ const [username, password] = useFieldModel(["username", "password"]);
 // const { value: password } = useField("password");
 
 const { status, signIn } = useAuth();
-
+import { useNotificationStore } from "~/stores/notifications";
+const { pushNotification } = useNotificationStore();
 const submitHandle = async () => {
   if ((await validate()).valid) {
     const { error, url } = await signIn("credentials", {
@@ -121,7 +122,6 @@ const submitHandle = async () => {
         password: "надо тренироваться",
       });
     } else {
-      // console.log(url);
       return navigateTo(url, { external: true });
     }
   }

@@ -73,12 +73,13 @@ label {
   flex-direction: column;
   font-size: 1rem;
   position: relative;
-  padding-bottom: 30px;
+  padding-bottom: 35px;
 
   span {
     margin-bottom: 10px;
   }
   input {
+    // margin: 2px;
     // background: var(--text-color);
     // color: var(--bg-color);
     &:focus {
@@ -108,7 +109,8 @@ label {
   }
   p {
     position: absolute;
-    bottom: 7px;
+    padding: 8px 0;
+    bottom: 0px;
     left: 0;
     color: var(--main-color);
 

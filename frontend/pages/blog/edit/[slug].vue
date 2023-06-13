@@ -44,16 +44,9 @@ const parser = new Markdown({
   breaks: true,
 });
 const mdContent = parser.render(post.value?.mdContent);
-
 useHead({
   title: `greenbabypost - ${post.value.title}`,
-  meta: [
-    { name: "description", content: "зёленый родился блог" },
-    {
-      name: "keywords",
-      content: `зеленый ребенок родился, greenbabyborn, зеленыйребенокродился, гринбейбиборн, green baby born, зеленый блог, блог, greenbabypost, ${post.value.title}`,
-    },
-  ],
+  meta: [{ name: "description", content: "зёленый родился блог" }],
 });
 </script>
 
@@ -65,6 +58,7 @@ useHead({
   &__top {
   }
   &__img {
+    // height: 80%;
     img {
       width: 100%;
       height: 100%;

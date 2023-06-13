@@ -12,7 +12,7 @@
             type="text"
             placeholder="Заголовок"
             :autofocus="true"
-            success-message="всё так"
+            success-message="✔️ топовый заголовок"
           />
           <!-- label="Заголовок" -->
           <client-only>
@@ -20,10 +20,10 @@
               v-model="previewMD"
               forid="previewMD"
               name="previewMD"
-              placeholder="Содержание поста"
+              placeholder="Содержание поста (MarkDown)"
               class="post-form__textarea"
               rows="8"
-              success-message="всё так"
+              success-message="✔️ ниче такой пост"
             ></FormTextarea>
             <!-- label="Содержание поста" -->
 
@@ -33,7 +33,7 @@
               name="rawContent"
               placeholder="Краткое описание"
               class="post-form__textarea"
-              success-message="всё так"
+              success-message="✔️ краткость сестра таланта"
             ></FormTextarea>
             <!-- label="Краткое описание" -->
           </client-only>
@@ -44,7 +44,7 @@
             placeholder="Слаг"
             forid="slug"
             type="text"
-            success-message="всё так"
+            success-message="✔️ звучит красиво"
           />
           <!-- label="Слаг" -->
           <div class="post-form__photo">
@@ -55,17 +55,23 @@
               @drag-leave="(e) => (dragLeave = e)"
               @drag-over="(e) => (dragOver = e)"
               @remove-photo="(e) => (removePhoto = e)"
+              @drag-btn-text="(e) => (dragBtnText = e)"
               name="selectFile"
-              success-message="фото успешно выбрано"
+              success-message="✔️ фото успешно выбрано"
             ></SelectFile>
           </div>
-          <FormButton
-            type="submit"
-            @click.prevent="submitHandle"
-            class="post-form__btn"
-            :disabled="!meta.dirty || !meta.valid"
-            >Создать</FormButton
-          >
+          <div class="post-form__btns">
+            <FormButton
+              type="submit"
+              @click.prevent="submitHandle"
+              class="post-form__btn"
+              :disabled="!meta.dirty || !meta.valid"
+              >Создать</FormButton
+            >
+            <FormButton class="post-form__clear-btn" @click.prevent="clearForm"
+              >Очистить форму</FormButton
+            >
+          </div>
         </form>
       </div>
       <div class="dash__right">
@@ -126,43 +132,45 @@ import {
 
 const createPostFormSchema = {
   postTitle(value: string) {
-    if (!value) return "мало букав";
+    if (!value) return "❌ пост без заголовка?";
 
     return true;
   },
   postSlug(value: string) {
-    if (!value) return "это поле обязательно";
+    if (!value) return "❌ подумай над слагом, бро";
 
     return true;
   },
   previewMD(value: string) {
-    if (!value) return "это поле обязательно";
+    if (!value) return "❌ no way";
 
     return true;
   },
   rawContent(value: string) {
-    if (!value) return "это поле обязательно";
+    if (!value) return "❌ это поле обязательно";
 
     return true;
   },
   selectFile(value: string) {
-    if (!value) return "фото обязательно";
+    if (!value) return "❌ фото обязательно";
 
     return true;
   },
 };
 
-const { errors, useFieldModel, meta, validate, setErrors } = useForm({
-  validationSchema: createPostFormSchema,
+const { errors, useFieldModel, meta, validate, setErrors, resetForm } = useForm(
+  {
+    validationSchema: createPostFormSchema,
 
-  initialValues: {
-    postTitle: "",
-    postSlug: "",
-    previewMD: "",
-    rawContent: "",
-    selectFile: "",
-  },
-});
+    initialValues: {
+      postTitle: "",
+      postSlug: "",
+      previewMD: "",
+      rawContent: "",
+      selectFile: "",
+    },
+  }
+);
 const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
   "postTitle",
   "postSlug",
@@ -183,6 +191,7 @@ let dragAndDrop = () => {};
 let dragLeave = () => {};
 let dragOver = () => {};
 let removePhoto = () => {};
+let dragBtnText = useState<any>();
 const { getSession } = useAuth();
 // console.log(await getSession());
 const submitHandle = async () => {
@@ -207,6 +216,12 @@ const submitHandle = async () => {
 
   if (data) {
     useRouter().push({ path: "/blog/" + data.value?.slug });
+    pushNotification({
+      title: "Великолепно!",
+      status: true,
+      text: "Пост успешно добавлен 👌",
+    });
+    clearForm();
   }
 };
 
@@ -231,6 +246,11 @@ watch(postTitle, () => {
 //   }
 //   return;
 // };
+const clearForm = () => {
+  resetForm();
+  srcPhoto.value = null;
+  dragLeave();
+};
 </script>
 
 <style scoped lang="scss">
@@ -274,7 +294,27 @@ watch(postTitle, () => {
   flex-direction: column;
   // gap: 20px;
   &__btn {
+  }
+  &__clear-btn {
+    // background: rgb(225, 106, 106);
+    color: var(--text-color);
+    background: transparent;
+    &:hover:enabled,
+    &:focus {
+      transition: all 0.3s ease 0s;
+      background: var(--bg-color);
+      color: var(--text-color);
+      // border: 2px var(--main-color) solid;
+      box-shadow: 0 0 0px 2px var(--main-color);
+      // outline: 1px black solid;
+    }
+  }
+  &__btns {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   &__photo-preview {
@@ -297,7 +337,7 @@ watch(postTitle, () => {
       pointer-events: none;
       position: absolute;
       width: 100%;
-      text-overflow: "...";
+      // text-overflow: "...";
       // height: 100%;
       color: var(--text-color);
       top: 0;

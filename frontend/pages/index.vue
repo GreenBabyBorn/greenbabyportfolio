@@ -134,8 +134,6 @@ import PortfolioProject from "@/components/PortfolioProject.vue";
 
 useHead({
   title: "greenbabyborn",
-  // viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  // charset: "utf-8",
 });
 
 let arrowHidden = isScroll();
@@ -171,7 +169,6 @@ let arrowHidden = isScroll();
     transform: rotate(180deg);
     fill: var(--text-color);
     padding-bottom: 100px;
-    // cursor: pointer;
     animation: arrow 3s infinite;
     transition: opacity 0.3s ease 0s;
   }
