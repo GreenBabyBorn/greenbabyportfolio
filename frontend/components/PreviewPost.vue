@@ -52,7 +52,7 @@ const postsStore = usePostsStore();
 const { getSession } = useAuth();
 const deletePost = async () => {
   const { data, error }: any = await useFetch(
-    `${config.public.restApiUrl}/posts` + props.slug,
+    `${config.public.restApiUrl}/posts/` + props.slug,
     {
       method: "DELETE",
       headers: {

@@ -1,4 +1,7 @@
 import { defineNuxtConfig } from "nuxt/config";
+
+const config = useRuntimeConfig();
+
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
