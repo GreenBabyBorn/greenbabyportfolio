@@ -7,7 +7,7 @@
         </div>
         <div class="post__img">
           <img
-            :src="'http://localhost:3001/api/' + post?.photo"
+            :src="`${config.public.restApiUrl}/` + post?.photo"
             alt="Картинка поста"
           />
         </div>
@@ -23,11 +23,12 @@
 <script setup lang="ts">
 import Markdown from "markdown-it";
 
+const config = useRuntimeConfig();
 const { getDate } = dateFormatInit();
 
 const route = useRoute();
 const { data: post, error }: any = await useFetch(
-  "http://localhost:3001/api/posts/" + route.params?.slug
+  `${config.public.restApiUrl}/posts/` + route.params?.slug
 );
 if (error.value) {
   throw showError({
