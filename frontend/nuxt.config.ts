@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       restApiUrl: "http://localhost:3001/api",
+      // appUrl: "http://localhost:3000",
     },
   },
   ssr: true,
@@ -58,7 +59,7 @@ export default defineNuxtConfig({
   },
   modules: ["@nuxtjs/color-mode", "@sidebase/nuxt-auth", "@pinia/nuxt"],
   auth: {
-    origin: "http://localhost:3000",
+    origin: config.app.baseURL,
     // Configuration of the global auth-middleware (only applies if you set `enableGlobalAppMiddleware: true` above!)
     globalMiddlewareOptions: {
       // Whether to allow access to 404 pages without authentication. Set this to `false` to force users to sign-in before seeing `404` pages. Setting this to false may lead to vue-router problems (as the target page does not exist)
