@@ -4,10 +4,33 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Test') {
+        stage('Deploy to server') {
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'greenbabyserver', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo \'Privetik\'', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '.')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])sshPublisher(publishers: [sshPublisherDesc(configName: 'greenbabyserver', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'echo \'Privetik\'', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '.')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                echo 'main test ci/cd'
+                sshagent(['ssh-greenbabyborn-green']) {
+                    sh 'rsync -e "ssh -o StrictHostKeyChecking=no" -avz . "green@greenbabyborn.ru:~/greenbabyportfolio"'
+                }
+            }
+        }
+        stage('Build frontend') {
+            steps {
+                sshagent(['ssh-greenbabyborn-green']) {
+                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru
+                    cd ~/greenbabyportfolio/frontend
+                    npm run build
+                    pm2 reload greenbabyborn
+               '''
+                }
+            }
+        }
+        stage('Build backend') {
+            steps {
+                sshagent(['ssh-greenbabyborn-green']) {
+                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru
+                    cd ~/greenbabyportfolio/backend
+                    npm run build
+                    pm2 reload greenbabyapi
+               '''
+                }
             }
         }
     }
