@@ -14,10 +14,10 @@ pipeline {
         stage('Build frontend') {
             steps {
                 sshagent(['ssh-greenbabyborn-green']) {
-                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru
-                    cd ~/greenbabyportfolio/frontend
-                    npm run build
-                    pm2 reload greenbabyborn
+                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru &
+                    cd ~/greenbabyportfolio/frontend &
+                    npm run build &
+                    pm2 reload greenbabyborn &
                '''
                 }
             }
@@ -25,10 +25,10 @@ pipeline {
         stage('Build backend') {
             steps {
                 sshagent(['ssh-greenbabyborn-green']) {
-                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru
-                    cd ~/greenbabyportfolio/backend
-                    npm run build
-                    pm2 reload greenbabyapi
+                    sh '''ssh -o StrictHostKeyChecking=no green@greenbabyborn.ru &
+                    cd ~/greenbabyportfolio/backend &
+                    npm run build &
+                    pm2 reload greenbabyapi &
                '''
                 }
             }
