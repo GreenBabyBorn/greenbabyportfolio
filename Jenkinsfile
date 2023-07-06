@@ -16,8 +16,10 @@ pipeline {
                 sshagent(['ssh-greenbabyborn-green']) {
                     sh '''ssh -o StrictHostKeyChecking=no -tt green@greenbabyborn.ru << EOF
                     cd ~/greenbabyportfolio/frontend
+                    npm ci
                     npm run build
                     pm2 reload greenbabyborn
+                    exit
                EOF'''
                 }
             }
@@ -27,8 +29,10 @@ pipeline {
                 sshagent(['ssh-greenbabyborn-green']) {
                     sh '''ssh -o StrictHostKeyChecking=no -tt green@greenbabyborn.ru << EOF
                     cd ~/greenbabyportfolio/backend
+                    npm ci
                     npm run build
                     pm2 reload greenbabyapi
+                    exit
                EOF'''
                 }
             }
