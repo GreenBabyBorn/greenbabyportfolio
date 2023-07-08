@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:13.3
     environment:
-      POSTGRES_DB: "greenbabyborn-api"
+      POSTGRES_DB: "greenbabyapi"
       POSTGRES_USER: "root"
       POSTGRES_PASSWORD: "1234"
     ports:

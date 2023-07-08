@@ -59,6 +59,7 @@ export default defineNuxtConfig({
 
   auth: {
     origin: process.env.AUTH_ORIGIN,
+    enableSessionRefreshOnWindowFocus: true,
     // Configuration of the global auth-middleware (only applies if you set `enableGlobalAppMiddleware: true` above!)
     globalMiddlewareOptions: {
       // Whether to allow access to 404 pages without authentication. Set this to `false` to force users to sign-in before seeing `404` pages. Setting this to false may lead to vue-router problems (as the target page does not exist)

@@ -13,7 +13,9 @@
         </div>
       </div>
       <div class="post__bottom">
-        <div id="post__content" class="post__content" v-html="mdContent"></div>
+        <client-only>
+          <div class="post__content markdown-body" v-html="mdContent"></div>
+        </client-only>
         <span class="post__date">{{ getDate(post?.createdAt) }}</span>
       </div>
     </div>
@@ -21,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import hljs from "highlight.js";
+import "highlight.js/styles/base16/material.css";
 import Markdown from "markdown-it";
 
 const config = useRuntimeConfig();
@@ -43,6 +47,15 @@ const parser = new Markdown({
   linkify: true,
   typographer: true,
   breaks: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+
+    return ""; // use external default escaping
+  },
 });
 const mdContent = parser.render(post.value?.mdContent);
 

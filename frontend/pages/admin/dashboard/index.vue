@@ -95,12 +95,13 @@
               />
             </div>
           </Transition>
-          <div
-            v-show="postContent"
-            class="post-preview__content"
-            v-html="postContent"
-            id="post__content"
-          ></div>
+          <client-only>
+            <div
+              v-show="postContent2"
+              class="post-preview__content markdown-body"
+              v-html="postContent2"
+            ></div>
+          </client-only>
         </div>
       </div>
     </div>
@@ -108,10 +109,13 @@
 </template>
 
 <script setup lang="ts">
+import hljs from "highlight.js";
+import "highlight.js/styles/base16/material.css";
 import Markdown from "markdown-it";
 import { ref, watch } from "vue";
 import slugify from "slugify";
 import { useNotificationStore } from "~/stores/notifications";
+
 import {
   useField,
   useIsFieldValid,
@@ -205,7 +209,7 @@ const submitHandle = async () => {
   formData.append("title", postTitle.value);
   formData.append("slug", postSlug.value);
   formData.append("rawContent", rawContent.value);
-  formData.append("mdContent", postContent.value);
+  formData.append("mdContent", postContent2.value);
   const { data, error }: any = await useFetch(
     `${config.public.restApiUrl}/posts`,
     {
@@ -234,11 +238,23 @@ const parser = new Markdown({
   linkify: true,
   typographer: true,
   breaks: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+
+    return ""; // use external default escaping
+  },
 });
 
-watch(previewMD, () => {
-  postContent.value = parser.render(previewMD.value);
+const postContent2 = computed(() => {
+  return parser.render(previewMD.value);
 });
+// watch(previewMD, () => {
+//   postContent.value = parser.render(previewMD.value);
+// });
 
 watch(postTitle, () => {
   postSlug.value = slugify(postTitle.value, { strict: true });
@@ -270,12 +286,13 @@ const clearForm = () => {
 }
 .dash {
   &__container {
-    max-width: 1200px;
+    // max-width: 1200px;
     display: flex;
+    flex-direction: column;
     gap: 3rem;
-    @media screen and (max-width: 767px) {
-      flex-direction: column;
-    }
+    // @media screen and (max-width: 767px) {
+    //   flex-direction: column;
+    // }
   }
   &__left {
     flex: 0 0 50%;

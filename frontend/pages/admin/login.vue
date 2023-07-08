@@ -12,6 +12,7 @@
             placeholder="логин"
             success-message="✔️ вроде, всё правильно"
             :maxlength="10"
+            autofocus
           />
           {{}}
           <!-- <span>{{ errors.username }}</span> -->
