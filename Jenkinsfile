@@ -18,7 +18,7 @@ pipeline {
                     cd ~/greenbabyportfolio/frontend
                     npm ci
                     npm run build
-                    pm2 reload greenbabyborn
+                    pm2 start
                     exit
                EOF'''
                 }
@@ -31,7 +31,7 @@ pipeline {
                     cd ~/greenbabyportfolio/backend
                     npm ci
                     npm run build
-                    pm2 reload greenbabyapi
+                    pm2 start
                     exit
                EOF'''
                 }
