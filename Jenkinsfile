@@ -17,8 +17,8 @@ pipeline {
                     sh '''ssh -o StrictHostKeyChecking=no -tt green@greenbabyborn.ru << EOF
                     cd ~/greenbabyportfolio/frontend
                     npm ci
-                    npm run build
-                    pm2 start
+                    npx nuxi build --dotenv .env.production
+                    source .env.production && pm2 start
                     exit
                EOF'''
                 }
