@@ -1,5 +1,5 @@
 import { Post } from "@prisma/client";
-import { IsBoolean, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CreatePostDto
   implements

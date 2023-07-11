@@ -10,6 +10,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { ConfigService } from "@nestjs/config";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { v4 as uuidv4 } from "uuid";
+import { SignIntDto } from "./dto/signin.dto";
+import { SignUptDto } from "./dto/signup.dto";
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,7 @@ export class AuthService {
   //   return null;
   // }
 
-  async signup(body: any) {
+  async signup(body: SignUptDto) {
     const hashedPassword = await argon.hash(body.password);
 
     const user = await this.prisma.user
@@ -58,7 +60,7 @@ export class AuthService {
 
     return {};
   }
-  async signin(body: any) {
+  async signin(body: SignIntDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         username: body.username,

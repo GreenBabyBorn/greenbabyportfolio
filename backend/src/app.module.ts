@@ -4,6 +4,7 @@ import { PostModule } from "./post/post.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
+import { PhotoPostModule } from "./photo-post/photo-post.module";
 
 @Module({
   controllers: [AppController],
@@ -12,6 +13,7 @@ import { ConfigModule } from "@nestjs/config";
     PrismaModule,
     PostModule,
     AuthModule,
+    PhotoPostModule,
   ],
 })
 export class AppModule {}

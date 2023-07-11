@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="post__bottom">
-        <div id="post__content" class="post__content" v-html="mdContent"></div>
+        <div class="post__content markdown-body" v-html="mdContent"></div>
         <span class="post__date">{{ getDate(post?.createdAt) }}</span>
       </div>
     </div>

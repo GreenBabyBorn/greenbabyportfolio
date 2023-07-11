@@ -1,8 +1,8 @@
 {
-  "name": "greenbabyborn-api",
+  "name": "greenbabyapi",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "greenbabyborn",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -27,6 +27,7 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^7.1.1",
     "@prisma/client": "^4.6.1",
     "@types/bcrypt": "^5.0.0",
     "argon2": "^0.30.2",

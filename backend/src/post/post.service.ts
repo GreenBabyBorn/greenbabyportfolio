@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { sep, posix } from "path";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreatePostDto } from "./dto/create-post.dto";
+import { UpdatePostDto } from "./dto/update-post.dto";
 import * as fs from "fs";
 
 @Injectable()
@@ -56,19 +57,41 @@ export class PostService {
     return;
   }
 
-  async create(createPostDto: CreatePostDto, file) {
+  async create(createPostDto: CreatePostDto) {
     try {
       return await this.prisma.post.create({
         data: {
           ...createPostDto,
-          photo: file.path.split(sep).join(posix.sep),
           published: false,
         },
       });
     } catch (e) {
-      if (!file) {
-        throw new BadRequestException("Photo is required");
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2002") {
+          throw new BadRequestException(
+            "There is a unique constraint violation, a new post cannot be created with this slug"
+          );
+        }
       }
+    }
+  }
+
+  async update(updatePostDto: UpdatePostDto, slug: string) {
+    try {
+      return await this.prisma.post.update({
+        where: {
+          slug: slug,
+        },
+        data: {
+          ...updatePostDto,
+          published: false,
+        },
+      });
+      // data: {
+      //   ...createPostDto,
+      //   published: false,
+      // },
+    } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2002") {
           throw new BadRequestException(
