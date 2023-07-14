@@ -16,6 +16,7 @@
           :isAuth="status == 'authenticated' ? true : false"
           :slug="post.slug"
           :post="post"
+          :published="post.published"
         />
       </TransitionGroup>
       <!-- </div> -->
@@ -33,11 +34,21 @@ useHead({
 });
 
 const postsStore = usePostsStore();
-const { status } = useAuth();
+const { status, getSession } = useAuth();
+let postsUrl = `${config.public.restApiUrl}/posts`;
 
-const { data: posts, error }: any = await useFetch(
-  `${config.public.restApiUrl}/posts`
-);
+if (status.value == "authenticated") {
+  postsUrl = `${config.public.restApiUrl}/posts/all`;
+}
+const { data: posts, error }: any = await useFetch(postsUrl, {
+  headers:
+    status.value == "authenticated"
+      ? {
+          Authorization:
+            "Bearer " + ((await getSession()) as any).user.accessToken,
+        }
+      : {},
+});
 postsStore.posts = posts.value;
 </script>
 

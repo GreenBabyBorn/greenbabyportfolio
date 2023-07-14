@@ -14,11 +14,24 @@ import * as fs from "fs";
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
-  async getAll() {
+  async getAllPublished(orderBy) {
+    return this.prisma.post.findMany({
+      where: {
+        published: true,
+      },
+      orderBy: [
+        {
+          id: orderBy || "desc",
+        },
+      ],
+    });
+  }
+
+  async getAll(orderBy) {
     return this.prisma.post.findMany({
       orderBy: [
         {
-          id: "desc",
+          id: orderBy || "desc",
         },
       ],
     });
@@ -47,12 +60,15 @@ export class PostService {
         if (e.code === "P2025")
           throw new NotFoundException(`Post ${slug} does not exits`);
       });
-    await fs.unlink(`./${post.photo}`, (err) => {
-      if (err) {
-        console.error(err);
-        return err;
-      }
-    });
+    if (post.photo) {
+      await fs.unlink(`./${post.photo}`, (err) => {
+        if (err) {
+          console.error(err);
+          return err;
+        }
+      });
+    }
+
     // console.log(post.photo);
     return;
   }
@@ -62,7 +78,6 @@ export class PostService {
       return await this.prisma.post.create({
         data: {
           ...createPostDto,
-          published: false,
         },
       });
     } catch (e) {
@@ -84,7 +99,6 @@ export class PostService {
         },
         data: {
           ...updatePostDto,
-          published: false,
         },
       });
       // data: {

@@ -7,7 +7,8 @@
         }}</NuxtLink>
         <div class="post__text">{{ rawContent }}</div>
         <div v-if="props.isAuth" class="post__manage">
-          <FormButton class="post__edit" @click="handleEdit">✏️</FormButton>
+          <input type="checkbox" v-model="published" />
+          <FormButton class="post__edit" @click="handleEdit()">✏️</FormButton>
           <FormButton class="post__remove" @click="deletePost()">❌</FormButton>
         </div>
 
@@ -35,6 +36,7 @@ interface Props {
   isAuth?: boolean;
   slug?: string;
   post?: object;
+  published: boolean;
 }
 
 // definePageMeta({
@@ -46,6 +48,8 @@ const config = useRuntimeConfig();
 
 const notificationStore = useNotificationStore();
 const props = defineProps<Props>();
+const published = ref();
+published.value = props.published;
 
 const postsStore = usePostsStore();
 

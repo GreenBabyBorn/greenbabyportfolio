@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -18,9 +19,20 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get()
-  getAll() {
-    return this.postService.getAll();
+  getAllPublished(@Query("orderBy") orderBy: string) {
+    return this.postService.getAllPublished(orderBy);
   }
+
+  @UseGuards(AtGuard)
+  @Get("/all")
+  getAll(@Query("orderBy") orderBy: string) {
+    return this.postService.getAll(orderBy);
+  }
+  // @UseGuards(AtGuard)
+  // @Get()
+  // getAll(@Query("published=false") published: boolean) {
+  //   return this.postService.getAllPublished(published);
+  // }
 
   @Get("/:slug")
   getBySlug(@Param("slug") slug) {

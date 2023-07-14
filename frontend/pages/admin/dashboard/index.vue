@@ -202,16 +202,37 @@ let removePhoto = () => {};
 let dragBtnText = useState<any>();
 const { getSession } = useAuth();
 // console.log(await getSession());
-const submitHandle = async () => {
-  let formData = new FormData();
 
-  formData.append("photo", filePhoto.value);
-  formData.append("title", postTitle.value);
-  formData.append("slug", postSlug.value);
-  formData.append("rawContent", rawContent.value);
-  formData.append("mdContent", postContent2.value);
-  const { data, error }: any = await useFetch(
+const response = "";
+
+const submitHandle = async () => {
+  const { data: postData }: any = await useFetch(
     `${config.public.restApiUrl}/posts`,
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization:
+          "Bearer " + ((await getSession()) as any).user.accessToken,
+      },
+      body: {
+        title: postTitle.value,
+        slug: postSlug.value,
+        rawContent: rawContent.value,
+        mdContent: postContent2.value,
+        published: true,
+      },
+    }
+  );
+  console.log(postData);
+  let formData = new FormData();
+  formData.append("photo", filePhoto.value);
+  // formData.append("title", postTitle.value);
+  // formData.append("slug", postSlug.value);
+  // formData.append("rawContent", rawContent.value);
+  // formData.append("mdContent", postContent2.value);
+  const { data, error }: any = await useFetch(
+    `${config.public.restApiUrl}/posts/${postData.value.slug}/photo`,
     {
       method: "POST",
       body: formData,

@@ -1,9 +1,8 @@
 import { Post } from "@prisma/client";
-import { IsString } from "class-validator";
+import { IsBoolean, IsBooleanString, IsString } from "class-validator";
 
 export class CreatePostDto
-  implements
-    Omit<Post, "id" | "photo" | "createdAt" | "updatedAt" | "published">
+  implements Omit<Post, "id" | "photo" | "createdAt" | "updatedAt">
 {
   @IsString()
   title: string;
@@ -17,9 +16,6 @@ export class CreatePostDto
   @IsString()
   slug: string;
 
-  // @IsBoolean()
-  // published: boolean;
-
-  // @IsString()
-  // photo: string;
+  @IsBoolean()
+  published: boolean;
 }
