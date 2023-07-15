@@ -7,7 +7,11 @@
         }}</NuxtLink>
         <div class="post__text">{{ rawContent }}</div>
         <div v-if="props.isAuth" class="post__manage">
-          <input type="checkbox" v-model="published" />
+          <input
+            type="checkbox"
+            v-model="published"
+            @input="handlePublished()"
+          />
           <FormButton class="post__edit" @click="handleEdit()">✏️</FormButton>
           <FormButton class="post__remove" @click="deletePost()">❌</FormButton>
         </div>
@@ -39,21 +43,23 @@ interface Props {
   published: boolean;
 }
 
+const props = defineProps<Props>();
+const emits = defineEmits(["updatePublished"]);
 // definePageMeta({
 //   // layout: "admin",
 //   // @ts-ignore
 //   // middleware: "auth",
 // });
+
+const published = ref(props.published);
+
 const config = useRuntimeConfig();
 
 const notificationStore = useNotificationStore();
-const props = defineProps<Props>();
-const published = ref();
-published.value = props.published;
-
 const postsStore = usePostsStore();
 
 const { getSession } = useAuth();
+
 const deletePost = async () => {
   const { data, error }: any = await useFetch(
     `${config.public.restApiUrl}/posts/` + props.slug,
@@ -67,13 +73,32 @@ const deletePost = async () => {
   );
   postsStore.removePost(props.post as Post);
   notificationStore.pushNotification({
-    title: "Всё прошло гладко",
+    title: "Ок!",
     status: true,
     text: "Пост успешно удален!",
   });
 };
+
 const handleEdit = () => {
   useRouter().push({ path: "/blog/edit/" + props.slug });
+};
+
+const handlePublished = async () => {
+  const { data, error }: any = await useFetch(
+    `${config.public.restApiUrl}/posts/` + props.slug,
+    {
+      method: "PATCH",
+      body: {
+        published: !props.published,
+      },
+      headers: {
+        Authorization:
+          "Bearer " + ((await getSession()) as any).user.accessToken,
+      },
+    }
+  );
+  emits("updatePublished", props.post);
+  // console.log(published.value);
 };
 </script>
 

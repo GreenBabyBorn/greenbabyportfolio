@@ -40,7 +40,7 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-let emit = defineEmits([
+let emits = defineEmits([
   "srcPhoto",
   "filePhoto",
   "dragAndDrop",
@@ -95,11 +95,11 @@ let changeInput = (event: any) => {
     reader.onload = (ev: any) => {
       srcPhoto.value = ev.target.result;
       inputValue.value = srcPhoto.value;
-      emit("srcPhoto", srcPhoto.value);
+      emits("srcPhoto", srcPhoto.value);
     };
     reader.readAsDataURL(file);
     filePhoto.value = file;
-    emit("filePhoto", filePhoto.value);
+    emits("filePhoto", filePhoto.value);
   });
   dragBtnText.value = filePhoto.value?.name;
   dragActive.value = false;
@@ -111,14 +111,14 @@ let removePhoto = () => {
   }
   dragBtnText.value = "... или перетащите файл";
   srcPhoto.value = null;
-  emit("srcPhoto", srcPhoto.value);
+  emits("srcPhoto", srcPhoto.value);
   inputValue.value = srcPhoto.value;
 };
 
-emit("dragAndDrop", dragAndDrop);
-emit("dragOver", dragOver);
-emit("dragLeave", dragLeave);
-emit("removePhoto", removePhoto);
+emits("dragAndDrop", dragAndDrop);
+emits("dragOver", dragOver);
+emits("dragLeave", dragLeave);
+emits("removePhoto", removePhoto);
 </script>
 
 <style scoped lang="scss">

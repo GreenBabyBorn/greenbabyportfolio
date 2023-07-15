@@ -22,5 +22,12 @@ export const usePostsStore = defineStore("posts", {
         return el !== post;
       });
     },
+    updatePost(post: Post) {
+      this.posts.forEach((o) => {
+        if (o.slug === post.slug) {
+          o = post;
+        }
+      });
+    },
   },
 });

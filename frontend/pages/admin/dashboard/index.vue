@@ -97,9 +97,9 @@
           </Transition>
           <client-only>
             <div
-              v-show="postContent2"
+              v-show="postContent"
               class="post-preview__content markdown-body"
-              v-html="postContent2"
+              v-html="postContent"
             ></div>
           </client-only>
         </div>
@@ -130,6 +130,7 @@ useHead({
   title: "greenbabydashboard",
   meta: [{ name: "description", content: "зёленый родился блог" }],
 });
+
 definePageMeta({
   layout: "admin",
   // @ts-ignore
@@ -189,7 +190,7 @@ const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
 
 // const postTitle = ref("");
 // const postSlug = ref("");
-const postContent = ref("");
+// const postContent = ref(""); --------
 // const rawContent = ref("");
 // const previewMD = ref("");
 
@@ -201,9 +202,6 @@ let dragOver = () => {};
 let removePhoto = () => {};
 let dragBtnText = useState<any>();
 const { getSession } = useAuth();
-// console.log(await getSession());
-
-const response = "";
 
 const submitHandle = async () => {
   const { data: postData }: any = await useFetch(
@@ -211,7 +209,6 @@ const submitHandle = async () => {
     {
       method: "POST",
       headers: {
-        "Content-type": "application/json",
         Authorization:
           "Bearer " + ((await getSession()) as any).user.accessToken,
       },
@@ -219,12 +216,11 @@ const submitHandle = async () => {
         title: postTitle.value,
         slug: postSlug.value,
         rawContent: rawContent.value,
-        mdContent: postContent2.value,
+        mdContent: postContent.value,
         published: true,
       },
     }
   );
-  console.log(postData);
   let formData = new FormData();
   formData.append("photo", filePhoto.value);
   // formData.append("title", postTitle.value);
@@ -270,7 +266,7 @@ const parser = new Markdown({
   },
 });
 
-const postContent2 = computed(() => {
+const postContent = computed(() => {
   return parser.render(previewMD.value);
 });
 // watch(previewMD, () => {

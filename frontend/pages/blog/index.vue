@@ -17,6 +17,7 @@
           :slug="post.slug"
           :post="post"
           :published="post.published"
+          @updatePublished="updatePublished"
         />
       </TransitionGroup>
       <!-- </div> -->
@@ -26,7 +27,7 @@
 
 <script setup lang="ts">
 import { TransitionGroup } from "vue";
-import { usePostsStore } from "~/stores/posts";
+import { Post, usePostsStore } from "~/stores/posts";
 const config = useRuntimeConfig();
 useHead({
   title: "greenbabyblog",
@@ -50,6 +51,12 @@ const { data: posts, error }: any = await useFetch(postsUrl, {
       : {},
 });
 postsStore.posts = posts.value;
+
+const updatePublished = (post: Post) => {
+  post.published = !post.published;
+  // postsStore.updatePost(e);
+  console.log(post);
+};
 </script>
 
 <style scoped lang="scss">
