@@ -45,6 +45,7 @@ export class PostController {
     return this.postService.create(createPostDto);
   }
 
+  @UseGuards(AtGuard)
   @Patch("/:slug")
   update(@Body() updatePostDto: UpdatePostDto, @Param("slug") slug: string) {
     return this.postService.update(updatePostDto, slug);
