@@ -7,9 +7,10 @@
         }}</NuxtLink>
         <div class="post__text">{{ rawContent }}</div>
         <div v-if="props.isAuth" class="post__manage">
-          <input
-            type="checkbox"
-            v-model="published"
+          <FormCheckBox
+            :value="props.published"
+            :name="props.slug + 'CheckBox'"
+            :forid="props.slug + 'CheckBox'"
             @input="handlePublished()"
           />
           <FormButton class="post__edit" @click="handleEdit()">✏️</FormButton>
@@ -45,13 +46,12 @@ interface Props {
 
 const props = defineProps<Props>();
 const emits = defineEmits(["updatePublished"]);
+
 // definePageMeta({
 //   // layout: "admin",
 //   // @ts-ignore
 //   // middleware: "auth",
 // });
-
-const published = ref(props.published);
 
 const config = useRuntimeConfig();
 
@@ -97,8 +97,22 @@ const handlePublished = async () => {
       },
     }
   );
+
   emits("updatePublished", props.post);
-  // console.log(published.value);
+  notificationStore.pushNotification({
+    title: "Ок!",
+    status: true,
+    text: `Статус поста изменен на: ${
+      !props.published ? "'опубликовано'" : "'в черновике'"
+    }`,
+  });
+  if (error) {
+    notificationStore.pushNotification({
+      title: "Опаньки!",
+      status: false,
+      text: `Ошибка: ${error}`,
+    });
+  }
 };
 </script>
 
