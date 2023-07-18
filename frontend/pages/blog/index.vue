@@ -54,8 +54,6 @@ postsStore.posts = posts.value;
 
 const updatePublished = (post: Post) => {
   post.published = !post.published;
-  // postsStore.updatePost(e);
-  console.log(post);
 };
 </script>
 

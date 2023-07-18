@@ -106,7 +106,7 @@ const handlePublished = async () => {
       !props.published ? "'опубликовано'" : "'в черновике'"
     }`,
   });
-  if (error) {
+  if (error.value) {
     notificationStore.pushNotification({
       title: "Опаньки!",
       status: false,
@@ -127,7 +127,7 @@ const handlePublished = async () => {
   }
   &__content {
     display: grid;
-    grid-template-rows: 1fr 1fr auto;
+    grid-template-rows: auto 1fr auto;
     flex: 0 0 50%;
     padding: 30px 30px 30px 30px;
     gap: 20px;
@@ -140,6 +140,12 @@ const handlePublished = async () => {
     &:focus {
       text-decoration: underline;
     }
+  }
+  &__edit {
+    background: none;
+  }
+  &__remove {
+    background: none;
   }
   &__manage {
     display: flex;
@@ -156,8 +162,6 @@ const handlePublished = async () => {
     margin-top: auto;
     align-self: flex-end;
     justify-self: flex-end;
-  }
-  &__remove {
   }
   &__img {
     flex: 1 0 50%;

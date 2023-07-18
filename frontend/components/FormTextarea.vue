@@ -62,7 +62,9 @@ label {
     border-radius: 15px;
     padding: 10px;
     transition: box-shadow 0.3s ease 0s;
-    background: #f7fff7;
+    // background: #f7fff7;
+    background: var(--bg-color);
+    color: var(--text-color);
     box-shadow: 0 0 0px 2px var(--text-color);
     &:focus {
       box-shadow: 0 0 0px 2px var(--main-color);

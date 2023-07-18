@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "presentation": {
+    "echo": false,
+    "reveal": "always",
+    "focus": false,
+    "panel": "dedicated",
+    "showReuseMessage": true,
+    "clear": true
+  },
+  "tasks": [
+    {
+      "label": "Bootstrap",
+      "dependsOn": ["Browser", "Frontend", "Backend"],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Frontend",
+      "type": "shell",
+      "isBackground": true,
+      "command": "npx nuxi dev --dotenv .env.local",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "presentation": {
+        "group": "greenbabyportfolio"
+      }
+    },
+    {
+      "label": "Backend",
+      "type": "shell",
+      "isBackground": true,
+      "command": "./backend.sh",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "presentation": {
+        "group": "greenbabyportfolio"
+      }
+    },
+    {
+      "label": "Browser",
+      "type": "shell",
+      "isBackground": true,
+      "command": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+      "args": ["http://localhost:3000"],
+      "presentation": {
+        "showReuseMessage": false,
+        "reveal": "silent",
+        "close": true
+      }
+    }
+  ]
+}

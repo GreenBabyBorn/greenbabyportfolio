@@ -133,7 +133,7 @@ emits("removePhoto", removePhoto);
     flex-direction: column;
     align-items: center;
     border-radius: 15px;
-    border: 2px var(--main-color) dashed;
+    border: 2px var(--text-color) dashed;
     padding: 1.8em;
     transition: background 0.3s ease 0s;
     &.error {

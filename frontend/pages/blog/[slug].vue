@@ -90,7 +90,7 @@ useHead({
     padding: 20px 0;
   }
   &__title {
-    text-align: center;
+    // text-align: center;
     font-weight: bold;
     font-size: 48px;
   }

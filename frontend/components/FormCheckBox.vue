@@ -20,7 +20,7 @@
         height="21"
         x=".5"
         y=".5"
-        fill="#FFF"
+        fill="none"
         stroke="var(--main-color)"
         rx="3"
       />
@@ -59,7 +59,6 @@ const { checked, checkedValue, errorMessage, handleChange, meta } = useField(
     //   syncVModel: "checkedValue",
   }
 );
-console.log(props.value, checked, checkedValue);
 </script>
 
 <style lang="scss">
@@ -90,13 +89,18 @@ input[type="checkbox"]:checked {
     &:checked + .checkbox__icon .tick {
       stroke-dashoffset: 0;
     }
+    &:focus + .checkbox__icon rect {
+      stroke-width: 3px;
+    }
   }
   &__icon {
     width: 1.375em;
     height: 1.375em;
     flex-shrink: 0;
     overflow: visible;
-
+    rect {
+      transition: all 0.3s ease 0s;
+    }
     .tick {
       stroke-dasharray: 20px;
       stroke-dashoffset: 20px;

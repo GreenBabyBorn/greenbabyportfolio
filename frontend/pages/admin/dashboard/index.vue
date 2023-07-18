@@ -188,12 +188,6 @@ const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
   "selectFile",
 ]);
 
-// const postTitle = ref("");
-// const postSlug = ref("");
-// const postContent = ref(""); --------
-// const rawContent = ref("");
-// const previewMD = ref("");
-
 let srcPhoto = useState<string | null>("srcPhoto");
 let filePhoto = useState<any>();
 let dragAndDrop = () => {};
@@ -216,17 +210,13 @@ const submitHandle = async () => {
         title: postTitle.value,
         slug: postSlug.value,
         rawContent: rawContent.value,
-        mdContent: postContent.value,
-        published: true,
+        mdContent: previewMD.value,
+        published: true, // TODO:
       },
     }
   );
   let formData = new FormData();
   formData.append("photo", filePhoto.value);
-  // formData.append("title", postTitle.value);
-  // formData.append("slug", postSlug.value);
-  // formData.append("rawContent", rawContent.value);
-  // formData.append("mdContent", postContent2.value);
   const { data, error }: any = await useFetch(
     `${config.public.restApiUrl}/posts/${postData.value.slug}/photo`,
     {
@@ -251,7 +241,8 @@ const submitHandle = async () => {
 };
 
 const parser = new Markdown({
-  html: true,
+  // html: true,
+
   linkify: true,
   typographer: true,
   breaks: true,

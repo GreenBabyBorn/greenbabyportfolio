@@ -68,10 +68,11 @@ label {
     }
     &.error {
       box-shadow: 0 0 0px 2px red !important;
-      background: #ffecec;
+      // background: #ffecec;
     }
     padding: 0.375rem 0.75rem;
-    background: #f7fff7;
+    background: var(--bg-color);
+    color: var(--text-color);
     box-shadow: 0 0 0px 2px var(--text-color);
     border-radius: 15px;
     transition: box-shadow 0.3s ease 0s;
