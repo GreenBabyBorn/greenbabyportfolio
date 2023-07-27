@@ -41,7 +41,7 @@ export default NuxtAuthHandler({
   secret: "your-secret-here",
   events: {
     async signOut({ token }) {
-      console.log("qweqweqwe", token.accessToken);
+      // console.log("qweqweqwe", token.accessToken);
       return await $fetch(`${config.public.restApiUrl}/auth/logout`, {
         method: "POST",
         headers: {
@@ -53,6 +53,7 @@ export default NuxtAuthHandler({
       });
     },
   },
+
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
@@ -79,8 +80,21 @@ export default NuxtAuthHandler({
       return session;
     },
   },
-  session: {},
-
+  session: {
+    maxAge: 7 * 24 * 60 * 60,
+  },
+  cookies: {
+    // sessionToken: {
+    //   name: "__session-token",
+    //   options: {
+    //     httpOnly: true,
+    //     sameSite: "lax",
+    //     path: "/",
+    //     secure: false,
+    //   },
+    // },
+  },
+  // useSecureCookies: true,
   pages: {
     // Change the default behavior to use `/login` as the path for the sign-in page
 
@@ -95,11 +109,11 @@ export default NuxtAuthHandler({
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
+
       credentials: {
         username: {
           label: "Username",
           type: "text",
-          // placeholder: "(hint: jsmith)",
         },
         password: {
           label: "Password",

@@ -10,16 +10,17 @@
     </div>
   </footer>
 </template>
-<script setup></script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
 .footer {
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   color: black;
   position: relative;
-  background: var(--main-color);
+  // background: var(--main-color);
+  background: linear-gradient(180deg, transparent, var(--main-color));
   &__container {
-    padding-top: 1em;
-    padding-bottom: 1em;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
   }
   &__body {
     display: flex;

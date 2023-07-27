@@ -27,7 +27,7 @@
       :name="props.name"
       type="file"
       id="file"
-      accept=".jpg, .jpeg, .png"
+      accept=".jpg, .jpeg, .png, .gif"
     />
   </div>
 </template>

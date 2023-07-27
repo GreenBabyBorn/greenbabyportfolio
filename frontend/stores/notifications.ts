@@ -17,7 +17,7 @@ export const useNotificationStore = defineStore("notification", {
       const store = useNotificationStore();
       const item = { id: uuidv4(), ...notification };
       this.notifications.push(item);
-      // console.log("create", notification);
+
       setTimeout(() => {
         store.removeNotification(item);
       }, 3000);

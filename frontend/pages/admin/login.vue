@@ -3,7 +3,7 @@
     <div class="login__container">
       <div class="login__body">
         <!-- {{ status }} -->
-        <h2 class="login__title">ВХОД</h2>
+        <h2 class="login__title">вход</h2>
         <!-- {{ user.data.value ? "auth" : "not auth" }} -->
         <form class="login__form">
           <FormInput
@@ -14,7 +14,7 @@
             :maxlength="10"
             autofocus
           />
-          {{}}
+
           <!-- <span>{{ errors.username }}</span> -->
           <FormInput
             name="password"
@@ -55,14 +55,14 @@
 </template>
 
 <script setup lang="ts">
+import { useNotificationStore } from "~/stores/notifications";
 definePageMeta({
+  layout: "empty",
+  middleware: "auth",
   auth: {
     unauthenticatedOnly: true,
     navigateAuthenticatedTo: "/admin/dashboard",
   },
-  // @ts-ignore
-  middleware: "auth",
-  layout: "empty",
 });
 useHead({
   title: "greenbabylogin",
@@ -107,17 +107,23 @@ const [username, password] = useFieldModel(["username", "password"]);
 // const { value: password } = useField("password");
 
 const { status, signIn } = useAuth();
-import { useNotificationStore } from "~/stores/notifications";
+
 const { pushNotification } = useNotificationStore();
 const submitHandle = async () => {
   if ((await validate()).valid) {
-    const { error, url } = await signIn("credentials", {
+    const { error, errors, url } = await signIn("credentials", {
       username: username.value,
       password: password.value,
       callbackUrl: "/admin/dashboard",
       redirect: false,
     });
     if (error) {
+      pushNotification({
+        status: false,
+        text: error,
+        title: "Ошибка",
+      });
+
       setErrors({
         username: "бро,",
         password: "надо тренироваться",

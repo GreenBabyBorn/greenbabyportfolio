@@ -31,7 +31,7 @@ export class PhotoPostService {
           slug: slug,
         },
         data: {
-          photo: file.path.split(sep).join(posix.sep),
+          photo: process.env.BASE_URL + file.path.split(sep).join(posix.sep),
         },
       });
     } catch (e) {

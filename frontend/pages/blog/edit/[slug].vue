@@ -135,7 +135,6 @@ useHead({
 
 definePageMeta({
   layout: "admin",
-  // @ts-ignore
   middleware: "auth",
 });
 const route = useRoute();

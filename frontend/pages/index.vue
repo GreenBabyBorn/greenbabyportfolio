@@ -9,7 +9,7 @@
           <h1>
             <!-- <a class="name" href="/">Котов Иван</a> -->
             <a class="index__name" href="/"
-              >GreenBabyBorn<span class="blinking-cursor">_</span>
+              >greenbabyborn<span class="blinking-cursor">_</span>
             </a>
           </h1>
           <p class="index__pos">Junior FullStack Developer</p>
@@ -91,7 +91,7 @@
     </section>
     <section class="portfolio">
       <div class="portfolio__container">
-        <h2 class="portfolio__heading">Проекты</h2>
+        <h2 class="portfolio__heading">проекты</h2>
         <div class="portfolio__body">
           <PortfolioProject
             class="portfolio__project"

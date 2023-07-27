@@ -133,7 +133,6 @@ useHead({
 
 definePageMeta({
   layout: "admin",
-  // @ts-ignore
   middleware: "auth",
 });
 
@@ -167,19 +166,25 @@ const createPostFormSchema = {
   },
 };
 
-const { errors, useFieldModel, meta, validate, setErrors, resetForm } = useForm(
-  {
-    validationSchema: createPostFormSchema,
+const {
+  errors,
+  useFieldModel,
+  meta,
+  validate,
+  setErrors,
+  setFieldError,
+  resetForm,
+} = useForm({
+  validationSchema: createPostFormSchema,
 
-    initialValues: {
-      postTitle: "",
-      postSlug: "",
-      previewMD: "",
-      rawContent: "",
-      selectFile: "",
-    },
-  }
-);
+  initialValues: {
+    postTitle: "",
+    postSlug: "",
+    previewMD: "",
+    rawContent: "",
+    selectFile: "",
+  },
+});
 const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
   "postTitle",
   "postSlug",
@@ -213,8 +218,25 @@ const submitHandle = async () => {
         mdContent: previewMD.value,
         published: true, // TODO:
       },
+      onResponseError({ request, response, options }) {
+        console.log(response);
+        // notificationStore.pushNotification({
+        //   title: response._data.error,
+        //   status: false,
+        //   text: response._data.message,
+        // });
+        if (
+          response._data.message ===
+          "There is a unique constraint violation, a new post cannot be created with this slug"
+        )
+          setFieldError("postSlug", "❌ такой слаг уже существует");
+
+        console.log(response._data.message);
+        return;
+      },
     }
   );
+
   let formData = new FormData();
   formData.append("photo", filePhoto.value);
   const { data, error }: any = await useFetch(

@@ -45,11 +45,12 @@ const notificationStore = useNotificationStore();
     gap: 0.5rem;
   }
   &__item {
-    padding: 20px;
+    padding: 1rem;
     backdrop-filter: blur(10px);
     display: grid;
     grid-template-areas: "title remove" "text remove";
     align-items: center;
+    justify-content: space-between;
     column-gap: 20px;
     row-gap: 10px;
     border-radius: 15px;
@@ -58,6 +59,7 @@ const notificationStore = useNotificationStore();
     background: #21ff8c4a;
   }
   &__title {
+    font-size: 1rem;
     font-weight: 700;
     position: relative;
     grid-area: title;
@@ -70,6 +72,7 @@ const notificationStore = useNotificationStore();
   }
   &__text {
     grid-area: text;
+    font-size: 1rem;
   }
   &__remove {
     font-size: 2rem;
