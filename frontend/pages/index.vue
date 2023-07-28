@@ -134,6 +134,7 @@ import PortfolioProject from "@/components/PortfolioProject.vue";
 
 useHead({
   title: "greenbabyborn",
+  meta: [{ name: "yandex-verification", content: "7bfa34f9ef0d1d78" }],
 });
 
 let arrowHidden = isScroll();

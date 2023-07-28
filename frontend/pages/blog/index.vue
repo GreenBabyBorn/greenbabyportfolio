@@ -12,7 +12,7 @@
           :mdContent="post.mdContent"
           :rawContent="post.rawContent"
           :date="post.createdAt"
-          :imgsrc="`${config.public.restApiUrl}/` + post.photo"
+          :imgsrc="post.photo || noImage"
           :isAuth="status == 'authenticated' ? true : false"
           :slug="post.slug"
           :post="post"
@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { TransitionGroup } from "vue";
 import { Post, usePostsStore } from "~/stores/posts";
+import noImage from "assets/img/no-image.jpg";
 const config = useRuntimeConfig();
 useHead({
   title: "greenbabyblog",

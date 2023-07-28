@@ -71,7 +71,7 @@ label {
     }
     &.error {
       box-shadow: 0 0 0px 2px red !important;
-      background: #ffecec;
+      // background: #ffecec;
     }
   }
 

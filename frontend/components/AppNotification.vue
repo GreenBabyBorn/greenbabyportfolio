@@ -36,7 +36,7 @@ const notificationStore = useNotificationStore();
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 50;
+  z-index: 55;
   margin: 20px;
   // :deep это костыль для того, чтобы работали стили для этого класса, который присваивается с помощью тега TransitionGroup
   :deep(.notification__list) {

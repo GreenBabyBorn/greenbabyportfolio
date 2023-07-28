@@ -47,7 +47,7 @@
             success-message="✔️ звучит красиво"
           />
           <!-- label="Слаг" -->
-          <div class="post-form__photo">
+          <div v-show="!post.photo" class="post-form__photo">
             <SelectFile
               @file-photo="(e) => (filePhoto = e)"
               @src-photo="(e) => (srcPhoto = e)"
@@ -65,7 +65,7 @@
               type="submit"
               @click.prevent="submitHandle"
               class="post-form__btn"
-              :disabled="!meta.dirty || !meta.valid"
+              :disabled="!meta.valid"
               >Обновить</FormButton
             >
             <FormButton class="post-form__clear-btn" @click.prevent="clearForm"
@@ -80,14 +80,15 @@
           <h2 v-if="postTitle" class="post-preview__title">
             {{ postTitle }}
           </h2>
-          <img :src="`${config.public.restApiUrl}/` + post.photo" alt="" />
+
           <Transition>
             <div v-if="srcPhoto" class="post-form__photo-preview">
               <div class="preview-remove">
-                <p>{{ filePhoto.name }}</p>
-                <span @click="removePhoto">&times;</span>
+                <p>
+                  {{ filePhoto.name }}
+                </p>
+                <span @click="removePhoto()">&times;</span>
               </div>
-
               <img
                 @drop.prevent="dragAndDrop"
                 @dragover.prevent="dragOver"
@@ -97,6 +98,17 @@
               />
             </div>
           </Transition>
+          <Transition>
+            <div v-show="post.photo" class="post-form__photo-preview">
+              <div class="preview-remove">
+                <p v-show="post.photo">{{ post.photo }}</p>
+
+                <span @click="removePhotoFromApi()">&times;</span>
+              </div>
+              <img :src="post.photo" alt="Фото поста" />
+            </div>
+          </Transition>
+
           <client-only>
             <div
               v-show="postContent"
@@ -138,9 +150,35 @@ definePageMeta({
   middleware: "auth",
 });
 const route = useRoute();
-const { data: post, error }: any = await useFetch(
+const {
+  data: post,
+  error,
+  refresh,
+}: any = await useFetch(
   `${config.public.restApiUrl}/posts/` + route.params?.slug
 );
+
+let srcPhoto = useState<string | null>("srcPhoto");
+
+let filePhoto = useState<any>();
+let dragAndDrop = () => {};
+let dragLeave = () => {};
+let dragOver = () => {};
+let removePhoto = () => {};
+const removePhotoFromApi = async () => {
+  const { data, error }: any = await useFetch(
+    `${config.public.restApiUrl}/posts/${route.params?.slug}/photo`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization:
+          "Bearer " + ((await getSession()) as any).user.accessToken,
+      },
+    }
+  );
+  refresh();
+};
+let dragBtnText = useState<any>();
 
 const parser = new Markdown({
   html: true,
@@ -182,7 +220,7 @@ const createPostFormSchema = {
     return true;
   },
   selectFile(value: string) {
-    if (!value) return "❌ фото обязательно";
+    // if (!value) return "❌ фото обязательно";
 
     return true;
   },
@@ -196,7 +234,7 @@ const { errors, useFieldModel, meta, validate, setErrors, resetForm } = useForm(
       postSlug: post.value.slug,
       previewMD: post.value.mdContent,
       rawContent: post.value.rawContent,
-      selectFile: "",
+      selectFile: srcPhoto.value,
     },
   }
 );
@@ -208,19 +246,11 @@ const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
   "selectFile",
 ]);
 
-let srcPhoto = useState<string | null>("srcPhoto");
-
-let filePhoto = useState<any>();
-let dragAndDrop = () => {};
-let dragLeave = () => {};
-let dragOver = () => {};
-let removePhoto = () => {};
-let dragBtnText = useState<any>();
 const { getSession } = useAuth();
 
 const submitHandle = async () => {
   const { data: postData }: any = await useFetch(
-    `${config.public.restApiUrl}/posts`,
+    `${config.public.restApiUrl}/posts/${route.params?.slug}`,
     {
       method: "PATCH",
       headers: {
@@ -231,14 +261,15 @@ const submitHandle = async () => {
         title: postTitle.value,
         slug: postSlug.value,
         rawContent: rawContent.value,
-        mdContent: postContent.value,
+        mdContent: previewMD.value,
         published: true, // TODO:
       },
     }
   );
+  // -----------------------------------------------------------------------
   let formData = new FormData();
   formData.append("photo", filePhoto.value);
-  const { data, error }: any = await useFetch(
+  const { data: postPhotoData, error }: any = await useFetch(
     `${config.public.restApiUrl}/posts/${postData.value.slug}/photo`,
     {
       method: "POST",
@@ -250,14 +281,15 @@ const submitHandle = async () => {
     }
   );
 
-  if (data) {
-    useRouter().push({ path: "/blog/" + data.value?.slug });
+  if (postData || postPhotoData) {
+    useRouter().push({ path: "/blog/edit/" + postData.value?.slug });
     notificationStore.pushNotification({
       title: "Великолепно!",
       status: true,
-      text: "Пост успешно добавлен 👌",
+      text: "Пост успешно обновлен 👌",
     });
-    clearForm();
+    // refresh();
+    // clearForm();
   }
 };
 

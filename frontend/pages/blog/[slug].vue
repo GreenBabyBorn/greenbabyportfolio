@@ -6,10 +6,7 @@
           <h1 class="post__title">{{ post?.title }}</h1>
         </div>
         <div class="post__img">
-          <img
-            :src="`${config.public.restApiUrl}/` + post?.photo"
-            alt="Картинка поста"
-          />
+          <img :src="post?.photo || noImage" alt="Картинка поста" />
         </div>
       </div>
       <div class="post__bottom">
@@ -26,6 +23,7 @@
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/material.css";
 import Markdown from "markdown-it";
+import noImage from "assets/img/no-image.jpg";
 
 const config = useRuntimeConfig();
 const { getDate } = dateFormatInit();
