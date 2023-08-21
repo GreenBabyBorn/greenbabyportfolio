@@ -19,6 +19,7 @@
           </ul>
         </nav>
       </div>
+      <ColorToggle class="header__color"></ColorToggle>
     </div>
   </header>
 </template>
@@ -47,9 +48,14 @@ const { status, data } = useAuth();
   &__container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
   }
   &__menu {
+  }
+  &__color {
+    :deep(svg path) {
+      fill: var(--text-color);
+    }
   }
 }
 .menu {

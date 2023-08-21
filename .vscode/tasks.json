@@ -46,6 +46,7 @@
       "isBackground": true,
       "command": "C:/Program Files/Google/Chrome/Application/chrome.exe",
       "args": ["http://localhost:3000"],
+
       "presentation": {
         "showReuseMessage": false,
         "reveal": "silent",

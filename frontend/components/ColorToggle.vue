@@ -1,5 +1,9 @@
 <template>
-  <button @click.prevent="changeTheme()" class="color">
+  <button
+    @click.prevent="changeTheme()"
+    :title="`${descriptionThemes[count]} тема`"
+    class="color"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -42,21 +46,22 @@
   </button>
 </template>
 <script setup lang="ts">
-// import { onMounted } from "vue";
-
 const colorMode = useColorMode();
 
-const themes = ["dark", "system", "light"];
+const descriptionThemes = ["Системная", "Темная", "Светлая"];
+const themes = ["system", "dark", "light"];
 
-let count = ref(0);
+let count = useState("count", () => {
+  return 0;
+});
 const changeTheme = () => {
   count.value = (count.value + 1) % 3;
   colorMode.preference = themes[count.value];
 };
 
-// onMounted(() => {
-//   // setColorMode(colorMode.preference);
-// });
+onMounted(() => {
+  count.value = themes.indexOf(colorMode.preference);
+});
 </script>
 
 <style lang="scss" scoped>

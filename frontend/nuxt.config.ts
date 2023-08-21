@@ -1,6 +1,31 @@
 import { defineNuxtConfig } from "nuxt/config";
+import { $fetch } from "ofetch";
 
 export default defineNuxtConfig({
+  routeRules: {
+    "/admin/**": { index: false },
+    "/blog/**": { sitemap: { changefreq: "always", priority: 0.8 } },
+  },
+  sitemap: {
+    xsl: false,
+    urls: async () => {
+      const blogPages = await $fetch(
+        `${process.env.NUXT_PUBLIC_REST_API_URL}/posts`
+      );
+      return blogPages.map((page) => ({
+        loc: `/blog/${page.slug}`,
+        lastmod: page.updatedAt,
+        changefreq: "daily",
+        priority: 0.8,
+      }));
+    },
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ["/"],
+    },
+  },
   runtimeConfig: {
     public: {
       // restApiUrl: "http://localhost:3001/api",
@@ -55,7 +80,12 @@ export default defineNuxtConfig({
   //   // "/blog/**": { swr: true },
   //   // "/admin/**": { ssr: false },
   // },
-  modules: ["@nuxtjs/color-mode", "@sidebase/nuxt-auth", "@pinia/nuxt"],
+  modules: [
+    "@nuxtjs/color-mode",
+    "@sidebase/nuxt-auth",
+    "@pinia/nuxt",
+    "nuxt-simple-sitemap",
+  ],
 
   auth: {
     origin: process.env.AUTH_ORIGIN,

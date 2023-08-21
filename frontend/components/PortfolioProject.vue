@@ -4,7 +4,7 @@
       <div class="project__img">
         <img :src="props.imgsrc" :alt="props.imgAlt" />
       </div>
-      <div class="project__info">Демо</div>
+      <div class="project__info">Подробнее</div>
     </a>
     <div class="project__description">
       <span class="project__text">{{ props.projText }}</span>
@@ -34,6 +34,7 @@ const props = defineProps<Props>();
       filter: brightness(0.5);
     }
     &:hover .project__info {
+      font-size: 1.2rem;
       opacity: 1;
     }
     display: inline-block;
@@ -71,10 +72,10 @@ const props = defineProps<Props>();
     justify-content: space-between;
   }
   &__text {
-    font-size: 20px;
+    font-size: 1.2rem;
   }
   &__github {
-    font-size: 20px;
+    font-size: 1.2rem;
     transition: color 0.3s ease 0s;
     &:hover {
       color: #e8eaea;

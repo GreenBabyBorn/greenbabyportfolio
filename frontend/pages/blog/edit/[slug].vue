@@ -2,8 +2,8 @@
   <div class="dash">
     <div class="dash__container">
       <div class="dash__left">
-        <h2 class="dash__title">Редкатировать пост:</h2>
-        <form class="dash__form post-form" action="#">
+        <h2 class="dash__title">Редактировать пост:</h2>
+        <form class="dash__form post-form">
           <FormInput
             class="post-form__title"
             v-model="postTitle"
@@ -267,6 +267,8 @@ const submitHandle = async () => {
     }
   );
   // -----------------------------------------------------------------------
+  filePhoto.value = filePhoto.value ? filePhoto.value : (filePhoto.value = "");
+  console.log(filePhoto.value);
   let formData = new FormData();
   formData.append("photo", filePhoto.value);
   const { data: postPhotoData, error }: any = await useFetch(
@@ -281,7 +283,7 @@ const submitHandle = async () => {
     }
   );
 
-  if (postData || postPhotoData) {
+  if (postData) {
     useRouter().push({ path: "/blog/edit/" + postData.value?.slug });
     notificationStore.pushNotification({
       title: "Великолепно!",
