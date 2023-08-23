@@ -138,6 +138,12 @@ useHead({
 });
 
 let arrowHidden = isScroll();
+const ogImageOptions = {
+  title: "greenbabyborn",
+  siteName: "greenbabyborn.ru",
+};
+// a. Use the Composition API
+defineOgImage(ogImageOptions);
 </script>
 
 <style scoped lang="scss">

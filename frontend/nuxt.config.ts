@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     rootId: "green",
     head: {
       meta: [
-        { name: "description", content: "лаборатория greenbabyborn'a" },
+        { name: "description", content: "лаборатория зелёнорождённого" },
         {
           name: "keywords",
           content:
@@ -85,6 +85,7 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-auth",
     "@pinia/nuxt",
     "nuxt-simple-sitemap",
+    "nuxt-og-image",
   ],
 
   auth: {

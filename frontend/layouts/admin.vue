@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <AdminHeader />
+    <TheHeader />
     <main class="page">
       <slot />
     </main>
