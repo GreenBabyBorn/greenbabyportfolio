@@ -142,7 +142,10 @@ const config = useRuntimeConfig();
 
 useHead({
   title: "greenbabydashboard",
-  meta: [{ name: "description", content: "зёленый родился блог" }],
+  meta: [
+    { name: "robots", content: "none" },
+    { name: "description", content: "зёленый родился блог" },
+  ],
 });
 
 definePageMeta({

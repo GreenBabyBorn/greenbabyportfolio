@@ -8,30 +8,11 @@
           </div>
           <h1>
             <!-- <a class="name" href="/">Котов Иван</a> -->
-            <a class="index__name" href="/"
-              >greenbabyborn<span class="blinking-cursor">_</span>
-            </a>
+            <a ref="typedText" class="index__name" href="/">greenbabyborn</a>
+            <span class="index__name blinking-cursor">_</span>
           </h1>
           <p class="index__pos">Junior FullStack Developer</p>
-          <!-- <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>JS</li>
-            <li>PHP</li>
-            <li>SCSS</li>
-            <li>DOCKER</li>
-            <li>GIT</li>
-            <li>MYSQL</li>
-            <li>POSTGRESQL</li>
-            <li>NGNIX</li>
-            <li>APACHE</li>
-            <li>REST API</li>
-            <li>GITHUB ACTIONS</li>
-            <li>VUE 3</li>
-            <li>NUXT 3</li>
-            <li>LARAVEL 9</li>
-            <li>TAILWIND</li>
-          </ul> -->
+
           <div class="social">
             <a
               class="social_gh"
@@ -87,6 +68,48 @@
             <g></g>
           </svg>
         </div>
+        <!-- <div class="index__marquee">
+          <ul class="index__techs">
+            <li>HTML</li>
+            <li>CSS/SCSS/LESS</li>
+            <li>JavaScript</li>
+            <li>PHP</li>
+            <li>DOCKER</li>
+            <li>GIT</li>
+            <li>MYSQL</li>
+            <li>POSTGRESQL</li>
+            <li>NGNIX</li>
+            <li>APACHE</li>
+            <li>REST API</li>
+            <li>GITHUB ACTIONS</li>
+            <li>Jenkins</li>
+            <li>VUE 3</li>
+            <li>NUXT 3</li>
+            <li>LARAVEL</li>
+            <li>TAILWIND</li>
+            <li>BASH</li>
+          </ul>
+          <ul class="index__techs">
+            <li>HTML</li>
+            <li>CSS/SCSS/LESS</li>
+            <li>JavaScript</li>
+            <li>PHP</li>
+            <li>DOCKER</li>
+            <li>GIT</li>
+            <li>MYSQL</li>
+            <li>POSTGRESQL</li>
+            <li>NGNIX</li>
+            <li>APACHE</li>
+            <li>REST API</li>
+            <li>GITHUB ACTIONS</li>
+            <li>Jenkins</li>
+            <li>VUE 3</li>
+            <li>NUXT 3</li>
+            <li>LARAVEL</li>
+            <li>TAILWIND</li>
+            <li>BASH</li>
+          </ul>
+        </div> -->
       </div>
     </section>
     <section class="portfolio">
@@ -144,14 +167,93 @@ const ogImageOptions = {
 };
 // a. Use the Composition API
 defineOgImage(ogImageOptions);
+
+// --------------------------------------------------------------------------------------------------
+
+const typedText = ref();
+
+const typedTextList = [
+  "JavaScript",
+  "TypeScript",
+  "HTML",
+  "CSS",
+  "Python",
+  "PHP",
+  "Docker",
+  "Git",
+  "Jenkins",
+  "PostgreSQL",
+  "MySQL",
+  "NGINX",
+  "Apache",
+  "Bash",
+  "Vue 3",
+  "Nuxt 3",
+  "Laravel",
+  "Tailwind",
+];
+
+const wait = async (ms: number) => {
+  return new Promise<void>((res) => {
+    setTimeout(res, ms);
+  });
+};
+
+let id;
+
+const backspaceText = async (element) => {
+  return new Promise<void>((res) => {
+    id = setInterval(() => {
+      if (!element.value) {
+        clearInterval(id);
+        res();
+        return;
+      }
+      let textSplit = element.value.innerText.split("");
+      textSplit.pop();
+      element.value.innerText = textSplit.join("");
+
+      if (!textSplit.length) {
+        clearInterval(id);
+        res();
+      }
+    }, 100);
+  });
+};
+
+const enterText = async (element, word: string) => {
+  for (const w of word) {
+    if (!element.value) return;
+    element.value.innerText += w;
+    await wait(150);
+  }
+};
+
+const generateText = async (element, list: string[]) => {
+  await backspaceText(element);
+  // while (element) {
+  for (const w of list) {
+    if (!element.value) break;
+    await enterText(element, w);
+    wait(500);
+    await backspaceText(element);
+  }
+  await enterText(element, "greenbabyborn");
+  // }
+};
+
+onMounted(() => {
+  generateText(typedText, typedTextList);
+});
+onUnmounted(() => clearInterval(id));
 </script>
 
 <style scoped lang="scss">
 .blinking-cursor {
   font-size: 1.2em;
   // user-select: none;
-  animation: blink 2s infinite;
-  transition: all 3s ease 0s;
+  animation: blink 0.7s infinite;
+  // transition: all 0s ease 0s;
 
   @keyframes blink {
     0% {
@@ -170,6 +272,39 @@ defineOgImage(ogImageOptions);
   opacity: 0;
 }
 .index {
+  &__marquee {
+    --gap: 0.6rem;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    gap: var(--gap);
+    // width: 500px;
+  }
+  &__techs {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-around;
+    gap: var(--gap);
+    min-width: 100%;
+    animation: scroll 100s linear infinite;
+    li {
+      flex: 0 0 auto;
+      margin: 2px;
+      // padding: 1rem 2rem;
+      // border-radius: 0.25rem;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+  @keyframes scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
   &__arrow {
     width: 30px;
     height: 30px;
@@ -244,17 +379,20 @@ defineOgImage(ogImageOptions);
     font-size: 1.1em;
     transition: all 0.3s ease 0s;
     &_vk {
-      &:hover {
+      &:hover,
+      &:focus {
         color: #597da3;
       }
     }
     &_tg {
-      &:hover {
+      &:hover,
+      &:focus {
         color: #0088cc;
       }
     }
     &_gh {
-      &:hover {
+      &:hover,
+      &:focus {
         color: #e8eaea;
       }
     }

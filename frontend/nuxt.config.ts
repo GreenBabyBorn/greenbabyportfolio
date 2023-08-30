@@ -2,6 +2,9 @@ import { defineNuxtConfig } from "nuxt/config";
 import { $fetch } from "ofetch";
 
 export default defineNuxtConfig({
+  ogImage: {
+    playground: false,
+  },
   routeRules: {
     "/admin/**": { index: false },
     "/blog/**": { sitemap: { changefreq: "always", priority: 0.8 } },
@@ -31,6 +34,7 @@ export default defineNuxtConfig({
       // restApiUrl: "http://localhost:3001/api",
       // appUrl: "http://localhost:3000",
       restApiUrl: process.env.NUXT_PUBLIC_REST_API_URL,
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     },
   },
   ssr: true,
@@ -44,7 +48,6 @@ export default defineNuxtConfig({
           content:
             "зеленый ребенок родился, greenbabyborn, зеленыйребенокродился, гринбейбиборн, green baby born, зеленый блог",
         },
-        { name: "robots", content: "all" },
         { name: "author", content: "greenbabyborn" },
       ],
       link: [

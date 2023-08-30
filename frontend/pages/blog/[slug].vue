@@ -24,6 +24,7 @@ import hljs from "highlight.js";
 import "highlight.js/styles/base16/material.css";
 import Markdown from "markdown-it";
 import noImage from "assets/img/no-image.jpg";
+import { Base } from ".nuxt/components";
 
 const config = useRuntimeConfig();
 const { getDate } = dateFormatInit();
@@ -60,6 +61,11 @@ const mdContent = parser.render(post.value?.mdContent);
 useHead({
   title: `greenbabypost - ${post.value.title}`,
   meta: [
+    { property: "og:url", content: config.public.siteUrl },
+    { property: "og:type", content: "article" },
+    { property: "og:title", content: post.value.title },
+    { property: "og:description", content: post.value.rawContent },
+    { property: "og:image", content: post.value.photo },
     { name: "description", content: "зёленый родился блог" },
     {
       name: "keywords",

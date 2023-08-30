@@ -62,13 +62,11 @@ const stateBurger = useState("stateBurger", () => {
 });
 
 const handleBurger = () => {
-  console.log(stateBurger.value);
   stateBurger.value = !stateBurger.value;
 };
 
 const handleLink = (e) => {
   if (e.target.nodeName === "A") stateBurger.value = false;
-  console.log(e);
 };
 
 const { signOut } = useAuth();
@@ -88,12 +86,12 @@ const logoutHandle = async () => {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1.3em 0px;
+  padding: clamp(1rem, 5vw, 1.3rem) 0px;
   z-index: 50;
 
   background: rgba(var(--bg-color-rgb), 0.4);
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     backdrop-filter: blur(10px);
   }
 
@@ -146,15 +144,20 @@ const logoutHandle = async () => {
     gap: 1.2em;
     @media (max-width: 768px) {
       flex-direction: column;
+      align-items: flex-start;
     }
   }
   &__item {
+    @media (max-width: 768px) {
+      display: inline-block;
+      width: 100%;
+    }
     .router-link-active {
       color: var(--main-color);
     }
   }
   &__link {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 5vw, 1.1rem);
     font-weight: 600;
     transition: color 0.3s ease 0s;
     @media (max-width: 768px) {
@@ -184,7 +187,7 @@ const logoutHandle = async () => {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     display: none;
   }
   &.active span:nth-child(2) {
