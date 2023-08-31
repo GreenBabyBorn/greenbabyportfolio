@@ -35,6 +35,10 @@ export default defineNuxtConfig({
       // appUrl: "http://localhost:3000",
       restApiUrl: process.env.NUXT_PUBLIC_REST_API_URL,
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      yandexMetrika: {
+        id: process.env.YANDEX_METRIKA_ID,
+        // ...
+      },
     },
   },
   ssr: true,
@@ -89,6 +93,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-simple-sitemap",
     "nuxt-og-image",
+    "yandex-metrika-module-nuxt3",
   ],
 
   auth: {
