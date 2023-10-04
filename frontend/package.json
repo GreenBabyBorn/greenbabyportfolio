@@ -14,7 +14,7 @@
     "@types/formidable": "^2.0.5",
     "@types/markdown-it": "^12.2.3",
     "@types/uuid": "^9.0.2",
-    "nuxt": "^3.6.2",
+    "nuxt": "^3.7.4",
     "nuxt-og-image": "^2.0.18",
     "nuxt-simple-sitemap": "^3.1.8",
     "sass": "^1.60.0"

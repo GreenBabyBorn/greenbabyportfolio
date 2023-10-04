@@ -26,7 +26,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ["/"],
+      // failOnError: false,
+      routes: ["/sitemap.xml", "/robots.txt"],
     },
   },
   runtimeConfig: {
@@ -37,7 +38,6 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
       yandexMetrika: {
         id: process.env.YANDEX_METRIKA_ID,
-        // ...
       },
     },
   },

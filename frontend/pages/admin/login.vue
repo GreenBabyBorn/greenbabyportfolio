@@ -111,13 +111,14 @@ const { status, signIn } = useAuth();
 const { pushNotification } = useNotificationStore();
 const submitHandle = async () => {
   if ((await validate()).valid) {
-    const { error, errors, url } = await signIn("credentials", {
+    const { status, ok, error, errors, url } = await signIn("credentials", {
       username: username.value,
       password: password.value,
       callbackUrl: "/admin/dashboard",
       redirect: false,
     });
     if (error) {
+      console.log(errors);
       pushNotification({
         status: false,
         text: error,
@@ -129,7 +130,7 @@ const submitHandle = async () => {
         password: "надо тренироваться",
       });
     } else {
-      return navigateTo(url, { external: true });
+      // return navigateTo(url, { external: true });
     }
   }
 };
