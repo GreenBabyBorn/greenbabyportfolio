@@ -6,9 +6,9 @@ export default function () {
   }
   if (router.path === "/") {
     if (process.client) {
-      let position = window.pageYOffset;
+      let position = window.scrollY;
       window.addEventListener("scroll", () => {
-        let scroll = window.pageYOffset;
+        let scroll = window.scrollY;
         scroll > position
           ? (statusHeader.value = false)
           : (statusHeader.value = false);

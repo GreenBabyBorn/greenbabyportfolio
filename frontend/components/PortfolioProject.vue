@@ -1,14 +1,15 @@
 <template>
   <div class="project">
-    <a :href="props.projLink" target="_blank" class="project__url">
+    <a :href="props.link" target="_blank" class="project__url">
       <div class="project__img">
-        <img :src="props.imgsrc" :alt="props.imgAlt" />
+        <img :src="props.imgSrc" :alt="props.imgAlt" />
       </div>
       <div class="project__info">Подробнее</div>
+      <time class="project__date" datetime="">{{ props.date }}</time>
     </a>
     <div class="project__description">
-      <span class="project__text">{{ props.projText }}</span>
-      <a target="_blank" class="project__github" :href="props.projGit"
+      <span class="project__text">{{ props.text }}</span>
+      <a target="_blank" class="project__github" :href="props.git"
         >github</a
       >
     </div>
@@ -17,10 +18,11 @@
 
 <script setup lang="ts">
 interface Props {
-  projLink: string;
-  projText: string;
-  projGit: string;
-  imgsrc: string;
+  link: string;
+  date?: string;
+  text: string;
+  git: string;
+  imgSrc: string;
   imgAlt?: string;
 }
 
@@ -29,6 +31,17 @@ const props = defineProps<Props>();
 
 <style scoped lang="scss">
 .project {
+  &__date{
+    font-family: Consolas;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    background: rgba(50, 255, 47, 0.599);
+  }
   &__url {
     &:hover img {
       filter: brightness(0.5);

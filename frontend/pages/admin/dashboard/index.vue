@@ -2,7 +2,7 @@
   <div class="dash">
     <div class="dash__container">
       <div class="dash__left">
-        <h2 class="dash__title">Написать пост:</h2>
+        <h2 class="dash__title">Написать пост</h2>
         <form class="dash__form post-form" action="#">
           <FormInput
             class="post-form__title"
@@ -320,6 +320,8 @@ const clearForm = () => {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    //   margin-top: 20px;
+    // margin-bottom: 20px;
     // @media screen and (max-width: 767px) {
     //   flex-direction: column;
     // }
@@ -330,8 +332,7 @@ const clearForm = () => {
   &__right {
     flex: 0 0 50%;
   }
-  margin-top: 20px;
-  margin-bottom: 20px;
+
   &__title {
     font-size: 40px;
     font-weight: 800;

@@ -11,7 +11,7 @@
             <a ref="typedText" class="index__name" href="/">greenbabyborn</a>
             <span class="index__name blinking-cursor">_</span>
           </h1>
-          <p class="index__pos">Junior FullStack Developer</p>
+          <p class="index__pos">FullStack Web Developer</p>
 
           <div class="social">
             <a
@@ -161,12 +161,12 @@ useHead({
 });
 
 let arrowHidden = isScroll();
-const ogImageOptions = {
-  title: "greenbabyborn",
-  siteName: "greenbabyborn.ru",
-};
+// const ogImageOptions = {
+//   title: "greenbabyborn",
+//   siteName: "greenbabyborn.ru",
+// };
 // a. Use the Composition API
-defineOgImage(ogImageOptions);
+// defineOgImage(ogImageOptions);
 
 // --------------------------------------------------------------------------------------------------
 
@@ -199,9 +199,9 @@ const wait = async (ms: number) => {
   });
 };
 
-let id;
+let id: any;
 
-const backspaceText = async (element) => {
+const backspaceText = async (element: any) => {
   return new Promise<void>((res) => {
     id = setInterval(() => {
       if (!element.value) {
@@ -221,7 +221,7 @@ const backspaceText = async (element) => {
   });
 };
 
-const enterText = async (element, word: string) => {
+const enterText = async (element: any, word: string) => {
   for (const w of word) {
     if (!element.value) return;
     element.value.innerText += w;
@@ -229,7 +229,7 @@ const enterText = async (element, word: string) => {
   }
 };
 
-const generateText = async (element, list: string[]) => {
+const generateText = async (element: any, list: string[]) => {
   await backspaceText(element);
   // while (element) {
   for (const w of list) {

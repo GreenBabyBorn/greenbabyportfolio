@@ -130,7 +130,7 @@ const submitHandle = async () => {
         password: "надо тренироваться",
       });
     } else {
-      // return navigateTo(url, { external: true });
+      return navigateTo(url, { external: true });
     }
   }
 };

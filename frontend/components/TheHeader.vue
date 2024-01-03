@@ -7,7 +7,9 @@
             <li class="menu__item">
               <NuxtLink class="menu__link" to="/">Главная</NuxtLink>
             </li>
-
+            <li class="menu__item">
+              <NuxtLink class="menu__link" to="/projects">Проекты</NuxtLink>
+            </li>
             <li class="menu__item">
               <NuxtLink class="menu__link" to="/blog">Блог</NuxtLink>
             </li>

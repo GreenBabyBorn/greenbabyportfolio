@@ -1,34 +1,35 @@
 import { defineNuxtConfig } from "nuxt/config";
-import { $fetch } from "ofetch";
+// import { $fetch } from "ofetch";
 
 export default defineNuxtConfig({
-  ogImage: {
-    playground: false,
-  },
-  routeRules: {
-    "/admin/**": { index: false },
-    "/blog/**": { sitemap: { changefreq: "always", priority: 0.8 } },
-  },
-  sitemap: {
-    xsl: false,
-    urls: async () => {
-      const blogPages = await $fetch(
-        `${process.env.NUXT_PUBLIC_REST_API_URL}/posts`
-      );
-      return blogPages.map((page) => ({
-        loc: `/blog/${page.slug}`,
-        lastmod: page.updatedAt,
-        changefreq: "daily",
-        priority: 0.8,
-      }));
-    },
-  },
+  devtools: true,
+  // ogImage: {
+  //   playground: false,
+  // },
+  // routeRules: {
+  //   "/admin/**": { index: false },
+  //   "/blog/**": { sitemap: { changefreq: "always", priority: 0.8 } },
+  // },
+  // sitemap: {
+  //   xsl: false,
+  //   urls: async () => {
+  //     const blogPages = await $fetch(
+  //       `${process.env.NUXT_PUBLIC_REST_API_URL}/posts`
+  //     );
+  //     return blogPages.map((page) => ({
+  //       loc: `/blog/${page.slug}`,
+  //       lastmod: page.updatedAt,
+  //       changefreq: "daily",
+  //       priority: 0.8,
+  //     }));
+  //   },
+  // },
   nitro: {
-    prerender: {
-      crawlLinks: true,
-      // failOnError: false,
-      routes: ["/sitemap.xml", "/robots.txt"],
-    },
+    // prerender: {
+    // crawlLinks: true,
+    // failOnError: false,
+    // routes: ["/sitemap.xml", "/robots.txt"],
+    // },
   },
   runtimeConfig: {
     public: {
@@ -36,9 +37,9 @@ export default defineNuxtConfig({
       // appUrl: "http://localhost:3000",
       restApiUrl: process.env.NUXT_PUBLIC_REST_API_URL,
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
-      yandexMetrika: {
-        id: process.env.YANDEX_METRIKA_ID,
-      },
+      // yandexMetrika: {
+      //   id: process.env.YANDEX_METRIKA_ID,
+      // },
     },
   },
   ssr: true,
@@ -91,11 +92,20 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "@sidebase/nuxt-auth",
     "@pinia/nuxt",
-    "nuxt-simple-sitemap",
-    "nuxt-og-image",
-    "yandex-metrika-module-nuxt3",
+    "nuxt-yandex-metrika",
+    // "nuxt-simple-sitemap",
+    // "nuxt-og-image",
   ],
-
+  yandexMetrika: {
+    id: "94783808",
+    // debug: process.env.NODE_ENV !== "production",
+    // delay: 0,
+    // cdn: false,
+    // verification: null, // Verification in Yandex Webmaster
+    // options: {
+    //  webvisor: true
+    // },
+  },
   auth: {
     origin: process.env.AUTH_ORIGIN,
     enableSessionRefreshOnWindowFocus: true,
