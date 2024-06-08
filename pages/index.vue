@@ -1,3 +1,105 @@
+<script setup lang="ts">
+// @ts-ignore
+import stroycontrol from "@/assets/img/projects/landing-stroycontrol.png";
+// @ts-ignore
+import portfolio from "~/assets/img/projects/landing-portfolio.png";
+// @ts-ignore
+import stroycom from "../assets/img/projects/stroycom-spa.png";
+import PortfolioProject from "@/components/PortfolioProject.vue";
+
+useHead({
+  title: "greenbabyborn",
+  meta: [{ name: "yandex-verification", content: "7bfa34f9ef0d1d78" }],
+});
+
+let arrowHidden = isScroll();
+// const ogImageOptions = {
+//   title: "greenbabyborn",
+//   siteName: "greenbabyborn.ru",
+// };
+// a. Use the Composition API
+// defineOgImage(ogImageOptions);
+
+// --------------------------------------------------------------------------------------------------
+
+const typedText = ref();
+
+const typedTextList = [
+  "JavaScript",
+  "TypeScript",
+  "HTML",
+  "CSS",
+  "Python",
+  "PHP",
+  "Docker",
+  "Git",
+  "Jenkins",
+  "PostgreSQL",
+  "MySQL",
+  "NGINX",
+  "Apache",
+  "Bash",
+  "Vue 3",
+  "Nuxt 3",
+  "Laravel",
+  "Tailwind",
+];
+
+const wait = async (ms: number) => {
+  return new Promise<void>((res) => {
+    setTimeout(res, ms);
+  });
+};
+
+let id: any;
+
+const backspaceText = async (element: any) => {
+  return new Promise<void>((res) => {
+    id = setInterval(() => {
+      if (!element.value) {
+        clearInterval(id);
+        res();
+        return;
+      }
+      let textSplit = element.value.innerText.split("");
+      textSplit.pop();
+      element.value.innerText = textSplit.join("");
+
+      if (!textSplit.length) {
+        clearInterval(id);
+        res();
+      }
+    }, 100);
+  });
+};
+
+const enterText = async (element: any, word: string) => {
+  for (const w of word) {
+    if (!element.value) return;
+    element.value.innerText += w;
+    await wait(150);
+  }
+};
+
+const generateText = async (element: any, list: string[]) => {
+  await backspaceText(element);
+  // while (element) {
+  for (const w of list) {
+    if (!element.value) break;
+    await enterText(element, w);
+    wait(500);
+    await backspaceText(element);
+  }
+  await enterText(element, "greenbabyborn");
+  // }
+};
+
+onMounted(() => {
+  generateText(typedText, typedTextList);
+});
+onUnmounted(() => clearInterval(id));
+</script>
+
 <template>
   <div>
     <section class="index">
@@ -145,108 +247,6 @@
     </section>
   </div>
 </template>
-
-<script setup lang="ts">
-// @ts-ignore
-import stroycontrol from "@/assets/img/projects/landing-stroycontrol.png";
-// @ts-ignore
-import portfolio from "~/assets/img/projects/landing-portfolio.png";
-// @ts-ignore
-import stroycom from "../assets/img/projects/stroycom-spa.png";
-import PortfolioProject from "@/components/PortfolioProject.vue";
-
-useHead({
-  title: "greenbabyborn",
-  meta: [{ name: "yandex-verification", content: "7bfa34f9ef0d1d78" }],
-});
-
-let arrowHidden = isScroll();
-// const ogImageOptions = {
-//   title: "greenbabyborn",
-//   siteName: "greenbabyborn.ru",
-// };
-// a. Use the Composition API
-// defineOgImage(ogImageOptions);
-
-// --------------------------------------------------------------------------------------------------
-
-const typedText = ref();
-
-const typedTextList = [
-  "JavaScript",
-  "TypeScript",
-  "HTML",
-  "CSS",
-  "Python",
-  "PHP",
-  "Docker",
-  "Git",
-  "Jenkins",
-  "PostgreSQL",
-  "MySQL",
-  "NGINX",
-  "Apache",
-  "Bash",
-  "Vue 3",
-  "Nuxt 3",
-  "Laravel",
-  "Tailwind",
-];
-
-const wait = async (ms: number) => {
-  return new Promise<void>((res) => {
-    setTimeout(res, ms);
-  });
-};
-
-let id: any;
-
-const backspaceText = async (element: any) => {
-  return new Promise<void>((res) => {
-    id = setInterval(() => {
-      if (!element.value) {
-        clearInterval(id);
-        res();
-        return;
-      }
-      let textSplit = element.value.innerText.split("");
-      textSplit.pop();
-      element.value.innerText = textSplit.join("");
-
-      if (!textSplit.length) {
-        clearInterval(id);
-        res();
-      }
-    }, 100);
-  });
-};
-
-const enterText = async (element: any, word: string) => {
-  for (const w of word) {
-    if (!element.value) return;
-    element.value.innerText += w;
-    await wait(150);
-  }
-};
-
-const generateText = async (element: any, list: string[]) => {
-  await backspaceText(element);
-  // while (element) {
-  for (const w of list) {
-    if (!element.value) break;
-    await enterText(element, w);
-    wait(500);
-    await backspaceText(element);
-  }
-  await enterText(element, "greenbabyborn");
-  // }
-};
-
-onMounted(() => {
-  generateText(typedText, typedTextList);
-});
-onUnmounted(() => clearInterval(id));
-</script>
 
 <style scoped lang="scss">
 .blinking-cursor {

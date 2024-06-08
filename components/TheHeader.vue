@@ -13,15 +13,15 @@
             <li class="menu__item">
               <NuxtLink class="menu__link" to="/blog">Блог</NuxtLink>
             </li>
-            <li v-if="status == 'authenticated'" class="menu__item">
+            <li class="menu__item">
               <NuxtLink class="menu__link" to="/admin/dashboard"
                 >Панель</NuxtLink
               >
             </li>
-            <li v-if="status == 'authenticated'" class="menu__item">
+            <li class="menu__item">
               <NuxtLink class="menu__link" to="/admin">Настройки</NuxtLink>
             </li>
-            <li v-if="status == 'authenticated'" class="menu__item">
+            <li class="menu__item">
               <button
                 @click.prevent="logoutHandle"
                 class="menu__link menu__link_logout"
@@ -60,7 +60,6 @@
 
 <script setup lang="ts">
 let statusHeader = isScroll();
-const { status, data } = useAuth();
 
 const stateBurger = useState("stateBurger", () => {
   return false;
@@ -70,14 +69,11 @@ const handleBurger = () => {
   stateBurger.value = !stateBurger.value;
 };
 
-const handleLink = (e) => {
+const handleLink = (e: any) => {
   if (e.target.nodeName === "A") stateBurger.value = false;
 };
 
-const { signOut } = useAuth();
-const logoutHandle = async () => {
-  await signOut({ callbackUrl: "/admin/login" });
-};
+const logoutHandle = async () => {};
 </script>
 
 <style scoped lang="scss">
