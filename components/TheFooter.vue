@@ -4,7 +4,7 @@
       <div class="footer__body">
         <ColorToggle class="footer__color"></ColorToggle>
         <p class="footer__copy">
-          © 2022-2023 greenbabyborn, Все права защищены.
+          ©{{ new Date().getFullYear() }} greenbabyborn, Все права защищены.
         </p>
       </div>
     </div>

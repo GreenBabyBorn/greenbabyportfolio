@@ -70,8 +70,8 @@ onMounted(() => {
   svg {
     transition: svg 0.3s ease 0s;
     fill: black;
-    width: 1.2em;
-    height: 1.2em;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &:focus-visible svg {

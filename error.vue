@@ -17,7 +17,7 @@ const props = defineProps({
   error: {
     type: Object,
     default: {
-      message: "12312312",
+      message: "",
     },
   },
   //   statusMessage: {
@@ -29,8 +29,6 @@ const props = defineProps({
   //     default: 404,
   //   },
 });
-
-// console.log(props.message);
 
 useHead({
   title: "greenbabyerror - " + props.error.statusCode,

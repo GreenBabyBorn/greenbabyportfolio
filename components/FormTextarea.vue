@@ -22,7 +22,6 @@
   </label>
 </template>
 <script setup lang="ts">
-import { useField } from "vee-validate";
 interface Props {
   value?: string | number | string[] | undefined;
   label?: string;

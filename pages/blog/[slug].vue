@@ -1,39 +1,15 @@
-<template>
-  <section class="post">
-    <div class="post__container">
-      <div class="post__top">
-        <div class="post__body">
-          <h1 class="post__title">{{ post?.title }}</h1>
-        </div>
-        <div class="post__img">
-          <img :src="post?.photo || noImage" alt="Картинка поста" />
-        </div>
-      </div>
-      <div class="post__bottom">
-        <client-only>
-          <div class="post__content markdown-body" v-html="mdContent"></div>
-        </client-only>
-        <span class="post__date">{{ getDate(post?.createdAt) }}</span>
-      </div>
-    </div>
-  </section>
-</template>
-
 <script setup lang="ts">
 import hljs from "highlight.js";
 import "highlight.js/styles/base16/material.css";
 import Markdown from "markdown-it";
 import noImage from "assets/img/no-image.jpg";
-import { Base } from ".nuxt/components";
-
-const config = useRuntimeConfig();
-const { getDate } = dateFormatInit();
 
 const route = useRoute();
 const { data: post, error }: any = await useFetch(
-  `${config.public.restApiUrl}/posts/` + route.params?.slug
+  `/api/posts/${route.params?.slug}`
 );
-if (error.value) {
+
+if (!post.value) {
   throw showError({
     statusCode: 404,
     statusMessage: "Post not found",
@@ -56,12 +32,11 @@ const parser = new Markdown({
     return ""; // use external default escaping
   },
 });
-const mdContent = parser.render(post.value?.mdContent);
+const mdContent = parser.render(post.value?.md);
 
 useHead({
   title: `greenbabypost - ${post.value.title}`,
   meta: [
-    { property: "og:url", content: config.public.siteUrl },
     { property: "og:type", content: "article" },
     { property: "og:title", content: post.value.title },
     { property: "og:description", content: post.value.rawContent },
@@ -74,6 +49,29 @@ useHead({
   ],
 });
 </script>
+
+<template>
+  <section class="post">
+    <div class="post__container">
+      <div class="post__top">
+        <div class="post__body">
+          <h1 class="post__title">{{ post?.title }}</h1>
+        </div>
+        <div class="post__img">
+          <img :src="post?.img || noImage" alt="Картинка поста" />
+        </div>
+      </div>
+      <div class="post__bottom">
+        <client-only>
+          <div class="post__content markdown-body" v-html="mdContent"></div>
+        </client-only>
+        <span class="post__date">{{
+          dateFormat.format(new Date(post?.createdAt))
+        }}</span>
+      </div>
+    </div>
+  </section>
+</template>
 
 <style scoped lang="scss">
 .post {

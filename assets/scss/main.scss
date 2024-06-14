@@ -1,13 +1,11 @@
 @use "sass:math";
-@use "@/assets/scss/variables" as *;
-
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800&display=swap");
 
 $fontFamily: "Nunito Sans";
-$fontSize: 1.2rem;
+$fontSize: 1rem;
 
 $containerWidth: 940px;
-
+@import "null.scss";
 :root {
   --bg-color: #f7fff7;
   --bg-color-rgb: 247, 255, 247;
@@ -15,6 +13,7 @@ $containerWidth: 940px;
   --text-color-rgb: 0, 0, 0;
   --grey-bg-color: rgb(237, 237, 237);
   --main-color: #52b381;
+  --main-color-rgb: 82, 179, 129;
 }
 
 body {
@@ -46,9 +45,10 @@ body {
   grid-template-rows: 1fr auto;
   // padding-top: 68px;
 }
+
 .page {
   .header + & {
-    margin-top: 3.6em;
+    margin-top: 5rem;
   }
 
   // margin-bottom: 50px;

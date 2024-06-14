@@ -1,12 +1,152 @@
+<script setup lang="ts">
+import type { Post } from "@prisma/client";
+import hljs from "highlight.js";
+import "highlight.js/styles/base16/material.css";
+import Markdown from "markdown-it";
+import slugify from "slugify";
+import { useNotificationStore } from "~/stores/notifications";
+
+useHead({
+  title: "greenbabydashboard",
+  meta: [{ name: "description", content: "зёленый родился блог" }],
+});
+
+definePageMeta({
+  layout: "admin",
+  middleware: "protected",
+});
+
+let fileInput = ref<HTMLInputElement>();
+let fileImg = ref();
+
+const route = useRoute();
+
+const notificationStore = useNotificationStore();
+
+const createPostFormSchema = {
+  postTitle: (value: string) => {
+    if (!value) return "❌ пост без заголовка?";
+    return true;
+  },
+  postSlug: (value: string) => {
+    if (!value) return "❌ подумай над слагом, бро";
+    return true;
+  },
+  postMd: (value: string) => {
+    if (!value) return "❌ no way";
+    return true;
+  },
+  postDescription: (value: string) => {
+    if (!value) return "❌ это поле обязательно";
+    return true;
+  },
+};
+
+const { data: post } = await useFetch<any>(`/api/posts/${route.params.slug}`);
+
+const { meta, defineField, resetForm } = useForm({
+  validationSchema: createPostFormSchema,
+
+  initialValues: {
+    postTitle: post.value.title,
+    postSlug: post.value.slug,
+    postMd: post.value.md,
+    postDescription: post.value.description,
+    postImg: post.value.img,
+  },
+});
+
+const [postTitle, postTitleAttrs] = defineField("postTitle");
+const [postSlug, postSlugAttrs] = defineField("postSlug");
+const [postMd, postMdAttrs] = defineField("postMd");
+const [postDescription, postDescriptionAttrs] = defineField("postDescription");
+const [postImg] = defineField("postImg");
+
+const { handleFileInput, files } = useFileStorage();
+
+const submitHandle = async () => {
+  try {
+    await $fetch(`/api/posts/` + post.value.slug, {
+      method: "PATCH",
+      body: {
+        title: postTitle.value,
+        slug: postSlug.value,
+        description: postDescription.value,
+        md: postMd.value,
+        img: files.value.length > 0 ? files.value : post.value.img,
+      },
+    });
+    notificationStore.pushNotification({
+      title: "Великолепно!",
+      status: true,
+      text: "Пост успешно обновлен",
+    });
+    navigateTo(`/blog/${postSlug.value}`);
+    clearForm();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const parser = new Markdown({
+  // html: true,
+  linkify: true,
+  typographer: true,
+  breaks: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+
+    return "";
+  },
+});
+
+const postContent = computed(() => {
+  return parser.render(postMd.value);
+});
+
+watch(postTitle, () => {
+  postSlug.value = slugify(postTitle.value, { strict: true });
+});
+
+let changeFileInput = (event: any) => {
+  let files = Array.from(!event.target?.files ? event : event.target.files);
+  files.forEach((file: any) => {
+    if (!file.type.match("image")) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev: any) => {
+      postImg.value = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+    fileImg.value = file;
+  });
+};
+
+const clearForm = () => {
+  resetForm();
+};
+
+const clearSrcImg = () => {
+  postImg.value = "";
+  if (fileInput.value) fileInput.value!.value = "";
+};
+</script>
+
 <template>
   <div class="dash">
     <div class="dash__container">
       <div class="dash__left">
-        <h2 class="dash__title">Редактировать пост:</h2>
+        <h2 class="dash__title">Редактирование</h2>
         <form class="dash__form post-form">
           <FormInput
             class="post-form__title"
             v-model="postTitle"
+            v-bind="postTitleAttrs"
             name="postTitle"
             forid="title"
             type="text"
@@ -14,58 +154,53 @@
             :autofocus="true"
             success-message="✔️ топовый заголовок"
           />
-          <!-- label="Заголовок" -->
+
           <client-only>
             <FormTextarea
-              v-model="previewMD"
-              forid="previewMD"
-              name="previewMD"
+              v-model="postMd"
+              v-bind="postMdAttrs"
+              forid="postMd"
+              name="postMd"
               placeholder="Содержание поста (MarkDown)"
               class="post-form__textarea"
               rows="8"
               success-message="✔️ ниче такой пост"
             ></FormTextarea>
-            <!-- label="Содержание поста" -->
 
             <FormTextarea
-              v-model="rawContent"
-              forid="rawContent"
-              name="rawContent"
+              v-model="postDescription"
+              v-bind="postDescriptionAttrs"
+              forid="postDescription"
+              name="postDescription"
               placeholder="Краткое описание"
               class="post-form__textarea"
               success-message="✔️ краткость сестра таланта"
             ></FormTextarea>
-            <!-- label="Краткое описание" -->
           </client-only>
           <FormInput
             class="post-form__slug"
             v-model="postSlug"
+            v-bind="postSlugAttrs"
             name="postSlug"
             placeholder="Слаг"
             forid="slug"
             type="text"
             success-message="✔️ звучит красиво"
           />
-          <!-- label="Слаг" -->
-          <div v-show="!post.photo" class="post-form__photo">
-            <SelectFile
-              @file-photo="(e) => (filePhoto = e)"
-              @src-photo="(e) => (srcPhoto = e)"
-              @drag-and-drop="(e) => (dragAndDrop = e)"
-              @drag-leave="(e) => (dragLeave = e)"
-              @drag-over="(e) => (dragOver = e)"
-              @remove-photo="(e) => (removePhoto = e)"
-              @drag-btn-text="(e) => (dragBtnText = e)"
+          <div class="post-form__photo">
+            <input
+              @change="changeFileInput"
               name="selectFile"
-              success-message="✔️ фото успешно выбрано"
-            ></SelectFile>
+              type="file"
+              @input="handleFileInput"
+            />
           </div>
           <div class="post-form__btns">
             <FormButton
               type="submit"
               @click.prevent="submitHandle"
               class="post-form__btn"
-              :disabled="!meta.valid"
+              :disabled="!meta.dirty || !meta.valid"
               >Обновить</FormButton
             >
             <FormButton class="post-form__clear-btn" @click.prevent="clearForm"
@@ -76,39 +211,19 @@
       </div>
       <div class="dash__right">
         <h2 class="dash__title">Предпросмотр:</h2>
-        <div class="post-form__preview post-preview">
+        <div v-if="postImg" class="post-form__preview post-preview">
           <h2 v-if="postTitle" class="post-preview__title">
             {{ postTitle }}
           </h2>
-
           <Transition>
-            <div v-if="srcPhoto" class="post-form__photo-preview">
+            <div class="post-form__photo-preview">
               <div class="preview-remove">
-                <p>
-                  {{ filePhoto.name }}
-                </p>
-                <span @click="removePhoto()">&times;</span>
+                <p>{{ fileImg?.name }}</p>
+                <span @click="clearSrcImg">&times;</span>
               </div>
-              <img
-                @drop.prevent="dragAndDrop"
-                @dragover.prevent="dragOver"
-                @dragleave="dragLeave"
-                :src="srcPhoto"
-                :alt="filePhoto.name"
-              />
+              <img :src="postImg" />
             </div>
           </Transition>
-          <Transition>
-            <div v-show="post.photo" class="post-form__photo-preview">
-              <div class="preview-remove">
-                <p v-show="post.photo">{{ post.photo }}</p>
-
-                <span @click="removePhotoFromApi()">&times;</span>
-              </div>
-              <img :src="post.photo" alt="Фото поста" />
-            </div>
-          </Transition>
-
           <client-only>
             <div
               v-show="postContent"
@@ -121,206 +236,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import hljs from "highlight.js";
-import "highlight.js/styles/base16/material.css";
-import Markdown from "markdown-it";
-import { ref, watch } from "vue";
-import slugify from "slugify";
-import { useNotificationStore } from "~/stores/notifications";
-
-import {
-  useField,
-  useIsFieldValid,
-  useForm,
-  useIsFieldDirty,
-  useFieldValue,
-} from "vee-validate";
-
-const config = useRuntimeConfig();
-
-useHead({
-  title: "greenbabydashboard",
-  meta: [
-    { name: "robots", content: "none" },
-    { name: "description", content: "зёленый родился блог" },
-  ],
-});
-
-definePageMeta({
-  layout: "admin",
-  middleware: "auth",
-});
-const route = useRoute();
-const {
-  data: post,
-  error,
-  refresh,
-}: any = await useFetch(
-  `${config.public.restApiUrl}/posts/` + route.params?.slug
-);
-
-let srcPhoto = useState<string | null>("srcPhoto");
-
-let filePhoto = useState<any>();
-let dragAndDrop = () => {};
-let dragLeave = () => {};
-let dragOver = () => {};
-let removePhoto = () => {};
-const removePhotoFromApi = async () => {
-  const { data, error }: any = await useFetch(
-    `${config.public.restApiUrl}/posts/${route.params?.slug}/photo`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization:
-          "Bearer " + ((await getSession()) as any).user.accessToken,
-      },
-    }
-  );
-  refresh();
-};
-let dragBtnText = useState<any>();
-
-const parser = new Markdown({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(str, { language: lang }).value;
-      } catch (__) {}
-    }
-
-    return ""; // use external default escaping
-  },
-});
-
-const notificationStore = useNotificationStore();
-
-const createPostFormSchema = {
-  postTitle(value: string) {
-    if (!value) return "❌ пост без заголовка?";
-
-    return true;
-  },
-  postSlug(value: string) {
-    if (!value) return "❌ подумай над слагом, бро";
-
-    return true;
-  },
-  previewMD(value: string) {
-    if (!value) return "❌ no way";
-
-    return true;
-  },
-  rawContent(value: string) {
-    if (!value) return "❌ это поле обязательно";
-
-    return true;
-  },
-  selectFile(value: string) {
-    // if (!value) return "❌ фото обязательно";
-
-    return true;
-  },
-};
-const { errors, useFieldModel, meta, validate, setErrors, resetForm } = useForm(
-  {
-    validationSchema: createPostFormSchema,
-
-    initialValues: {
-      postTitle: post.value.title,
-      postSlug: post.value.slug,
-      previewMD: post.value.mdContent,
-      rawContent: post.value.rawContent,
-      selectFile: srcPhoto.value,
-    },
-  }
-);
-const [postTitle, postSlug, previewMD, rawContent, selectFile] = useFieldModel([
-  "postTitle",
-  "postSlug",
-  "previewMD",
-  "rawContent",
-  "selectFile",
-]);
-
-const { getSession } = useAuth();
-
-const submitHandle = async () => {
-  const { data: postData }: any = await useFetch(
-    `${config.public.restApiUrl}/posts/${route.params?.slug}`,
-    {
-      method: "PATCH",
-      headers: {
-        Authorization:
-          "Bearer " + ((await getSession()) as any).user.accessToken,
-      },
-      body: {
-        title: postTitle.value,
-        slug: postSlug.value,
-        rawContent: rawContent.value,
-        mdContent: previewMD.value,
-        published: true, // TODO:
-      },
-    }
-  );
-  // -----------------------------------------------------------------------
-  filePhoto.value = filePhoto.value ? filePhoto.value : (filePhoto.value = "");
-  console.log(filePhoto.value);
-  let formData = new FormData();
-  formData.append("photo", filePhoto.value);
-  const { data: postPhotoData, error }: any = await useFetch(
-    `${config.public.restApiUrl}/posts/${postData.value.slug}/photo`,
-    {
-      method: "POST",
-      body: formData,
-      headers: {
-        Authorization:
-          "Bearer " + ((await getSession()) as any).user.accessToken,
-      },
-    }
-  );
-
-  if (postData) {
-    useRouter().push({ path: "/blog/edit/" + postData.value?.slug });
-    notificationStore.pushNotification({
-      title: "Великолепно!",
-      status: true,
-      text: "Пост успешно обновлен 👌",
-    });
-    // refresh();
-    // clearForm();
-  }
-};
-
-const postContent = computed(() => {
-  return parser.render(previewMD.value);
-});
-// watch(previewMD, () => {
-//   postContent.value = parser.render(previewMD.value);
-// });
-
-watch(postTitle, () => {
-  postSlug.value = slugify(postTitle.value, { strict: true });
-});
-
-// const generateSlug = () => {
-//   if (postTitle.value) {
-//     postSlug.value = slugify(postTitle.value, { strict: true });
-//   }
-//   return;
-// };
-const clearForm = () => {
-  resetForm();
-  srcPhoto.value = null;
-  dragLeave();
-};
-</script>
 
 <style scoped lang="scss">
 /* we will explain what these classes do next! */
@@ -339,6 +254,8 @@ const clearForm = () => {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    //   margin-top: 20px;
+    // margin-bottom: 20px;
     // @media screen and (max-width: 767px) {
     //   flex-direction: column;
     // }
@@ -349,8 +266,7 @@ const clearForm = () => {
   &__right {
     flex: 0 0 50%;
   }
-  margin-top: 20px;
-  margin-bottom: 20px;
+
   &__title {
     font-size: 40px;
     font-weight: 800;
@@ -474,103 +390,3 @@ const clearForm = () => {
   }
 }
 </style>
-
-<!-- <template>
-  <section class="post">
-    <div class="post__container">
-      <div class="post__top">
-        <div class="post__body">
-          <h1 class="post__title">{{ post?.title }}</h1>
-        </div>
-        <div class="post__img">
-          <img
-            :src="`${config.public.restApiUrl}/` + post?.photo"
-            alt="Картинка поста"
-          />
-        </div>
-      </div>
-      <div class="post__bottom">
-        <div class="post__content markdown-body" v-html="mdContent"></div>
-        <span class="post__date">{{ getDate(post?.createdAt) }}</span>
-      </div>
-    </div>
-  </section>
-</template>
-
-<script setup lang="ts">
-import Markdown from "markdown-it";
-
-const config = useRuntimeConfig();
-const { getDate } = dateFormatInit();
-
-const route = useRoute();
-const { data: post, error }: any = await useFetch(
-  `${config.public.restApiUrl}/posts/` + route.params?.slug
-);
-if (error.value) {
-  throw showError({
-    statusCode: 404,
-    statusMessage: "Post not found",
-    message: "Пост не найден",
-  });
-}
-
-const parser = new Markdown({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-});
-const mdContent = parser.render(post.value?.mdContent);
-useHead({
-  title: `greenbabypost - ${post.value.title}`,
-  meta: [{ name: "description", content: "зёленый родился блог" }],
-});
-</script>
-
-<style scoped lang="scss">
-.post {
-  &__container {
-    margin-bottom: 50px;
-  }
-  &__top {
-  }
-  &__img {
-    // height: 80%;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 0.3rem;
-    }
-  }
-  &__body {
-    padding: 20px 0;
-  }
-  &__title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 48px;
-  }
-  &__date {
-    color: #888;
-    padding: 20px 0;
-    font-size: 16px;
-  }
-  &__bottom {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-  }
-  &__content {
-    line-height: normal;
-    width: 100%;
-    line-height: 1.45;
-    margin: 2rem auto 1rem;
-    padding: 0.25rem;
-    font-size: 18px;
-    min-height: 100%;
-  }
-}
-</style> -->

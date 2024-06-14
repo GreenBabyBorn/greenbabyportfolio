@@ -1,3 +1,72 @@
+<script setup lang="ts">
+import { useNotificationStore } from "~/stores/notifications";
+import { useProjectsStore } from "~/stores/projects";
+interface Props {
+  title: string;
+  link: string;
+  date: string;
+  text: string;
+  git: string;
+  imgSrc: string;
+  imgAlt?: string;
+  slug?: string;
+  published: boolean;
+  project?: object;
+}
+
+const props = defineProps<Props>();
+
+const notificationStore = useNotificationStore();
+const projectsStore = useProjectsStore();
+const emits = defineEmits(["updatePublished"]);
+
+const user = useUser();
+
+const deleteProject = async () => {
+  const res = await $fetch(`/api/projects/` + props.slug, {
+    method: "DELETE",
+    body: {
+      slug: props.slug,
+    },
+  });
+  projectsStore.removeProject(props.project as any);
+  notificationStore.pushNotification({
+    title: "Успешно!",
+    status: true,
+    text: "Пост успешно удален!",
+  });
+};
+
+const handleEdit = () => {
+  useRouter().push({ path: "/blog/edit/" + props.slug });
+};
+
+const handlePublished = async () => {
+  try {
+    const res = await $fetch("/api/projects/" + props.slug, {
+      method: "PATCH",
+      body: {
+        published: !props.published,
+      },
+    });
+    emits("updatePublished", props.project);
+    notificationStore.pushNotification({
+      title: "Успешно!",
+      status: true,
+      text: `Статус поста изменен на: ${
+        !props.published ? "'опубликовано'" : "'в черновике'"
+      }`,
+    });
+  } catch (e) {
+    notificationStore.pushNotification({
+      title: "Опаньки!",
+      status: false,
+      text: `Ошибка: ${e}`,
+    });
+  }
+};
+</script>
+
 <template>
   <div class="project">
     <a :href="props.link" target="_blank" class="project__url">
@@ -5,33 +74,43 @@
         <img :src="props.imgSrc" :alt="props.imgAlt" />
       </div>
       <div class="project__info">Подробнее</div>
-      <time class="project__date" datetime="">{{ props.date }}</time>
     </a>
     <div class="project__description">
-      <span class="project__text">{{ props.text }}</span>
-      <a target="_blank" class="project__github" :href="props.git"
-        >github</a
-      >
+      <span class="project__text">{{ props.title }}</span>
+      <p>{{ props.text }}</p>
+      <a target="_blank" class="project__github" :href="props.git">github</a>
+    </div>
+
+    <div v-if="user" class="project__manage">
+      <FormCheckBox
+        :value="props.published"
+        :name="props.slug + 'CheckBox'"
+        :forid="props.slug + 'CheckBox'"
+        @input="handlePublished()"
+      />
+      <FormButton class="project__edit" @click="handleEdit()"
+        >Редактировать
+      </FormButton>
+      <FormButton class="project__remove" @click="deleteProject()"
+        >Удалить
+      </FormButton>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-interface Props {
-  link: string;
-  date?: string;
-  text: string;
-  git: string;
-  imgSrc: string;
-  imgAlt?: string;
-}
-
-const props = defineProps<Props>();
-</script>
-
 <style scoped lang="scss">
 .project {
-  &__date{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__manage {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  &__date {
     font-family: Consolas;
     position: absolute;
     top: 1rem;
@@ -40,7 +119,7 @@ const props = defineProps<Props>();
     padding: 0.5rem;
     border-radius: 1rem;
     backdrop-filter: blur(10px);
-    background: rgba(50, 255, 47, 0.599);
+    background: rgba(22, 22, 22, 0.599);
   }
   &__url {
     &:hover img {
@@ -80,15 +159,17 @@ const props = defineProps<Props>();
     font-size: 20px;
   }
   &__description {
-    margin-top: 30px;
     display: flex;
+    gap: 1rem;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   &__text {
     font-size: 1.2rem;
   }
   &__github {
     font-size: 1.2rem;
+    text-decoration: underline;
     transition: color 0.3s ease 0s;
     &:hover {
       color: #e8eaea;

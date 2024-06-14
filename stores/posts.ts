@@ -3,11 +3,11 @@ import { defineStore } from "pinia";
 export interface Post {
   id: number;
   title: string;
-  rawContent: string;
-  mdContent: string;
+  description: string;
+  md: string;
   slug: string;
   published: boolean;
-  photo: string;
+  img: string;
   createdAt: string;
   updatedAt: string;
 }

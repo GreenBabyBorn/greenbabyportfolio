@@ -1,44 +1,70 @@
+<script setup lang="ts">
+const user = useUser();
+
+let statusHeader = isScroll();
+
+const stateBurger = useState("stateBurger", () => {
+  return false;
+});
+
+const handleBurger = () => {
+  stateBurger.value = !stateBurger.value;
+};
+
+const closeMenu = () => {
+  stateBurger.value = false;
+};
+
+const logoutHandle = async () => {
+  await $fetch("/api/auth/logout", {
+    method: "POST",
+  });
+  navigateTo("/admin/login");
+  user.value = "";
+};
+</script>
+
 <template>
   <header :class="{ _status: !statusHeader }" class="header">
     <div class="header__container">
       <div class="header__menu menu">
         <nav :class="{ active: stateBurger }" class="menu__body">
-          <ul @click="handleLink($event)" class="menu__list">
+          <!-- <ul @click="handleLink($event)" class="menu__list"> -->
+          <ul class="menu__list">
             <li class="menu__item">
-              <NuxtLink class="menu__link" to="/">Главная</NuxtLink>
-            </li>
-            <li class="menu__item">
-              <NuxtLink class="menu__link" to="/projects">Проекты</NuxtLink>
-            </li>
-            <li class="menu__item">
-              <NuxtLink class="menu__link" to="/blog">Блог</NuxtLink>
-            </li>
-            <li class="menu__item">
-              <NuxtLink class="menu__link" to="/admin/dashboard"
-                >Панель</NuxtLink
+              <NuxtLink @click="closeMenu" class="menu__link" to="/"
+                >Обо мне</NuxtLink
               >
             </li>
             <li class="menu__item">
-              <NuxtLink class="menu__link" to="/admin">Настройки</NuxtLink>
+              <NuxtLink @click="closeMenu" class="menu__link" to="/blog"
+                >Блог</NuxtLink
+              >
             </li>
             <li class="menu__item">
+              <NuxtLink @click="closeMenu" class="menu__link" to="/projects"
+                >Проекты</NuxtLink
+              >
+            </li>
+            <!-- <li v-if="user" class="menu__item">
+              <NuxtLink @click="closeMenu" class="menu__link" to="/admin"
+                >Дашборд</NuxtLink
+              >
+            </li> -->
+            <li v-if="user" class="menu__item">
+              <NuxtLink
+                @click="closeMenu"
+                class="menu__link"
+                to="/admin/settings"
+                >Настройки</NuxtLink
+              >
+            </li>
+            <li v-if="user" class="menu__item">
               <button
                 @click.prevent="logoutHandle"
                 class="menu__link menu__link_logout"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                  />
-                </svg>
+                Выход
               </button>
             </li>
           </ul>
@@ -58,24 +84,6 @@
   </header>
 </template>
 
-<script setup lang="ts">
-let statusHeader = isScroll();
-
-const stateBurger = useState("stateBurger", () => {
-  return false;
-});
-
-const handleBurger = () => {
-  stateBurger.value = !stateBurger.value;
-};
-
-const handleLink = (e: any) => {
-  if (e.target.nodeName === "A") stateBurger.value = false;
-};
-
-const logoutHandle = async () => {};
-</script>
-
 <style scoped lang="scss">
 ._status {
   opacity: 0;
@@ -90,7 +98,7 @@ const logoutHandle = async () => {};
   padding: clamp(1rem, 5vw, 1.3rem) 0px;
   z-index: 50;
 
-  background: rgba(var(--bg-color-rgb), 0.4);
+  // background: rgba(var(--bg-color-rgb), 0.4);
 
   @media (min-width: 769px) {
     backdrop-filter: blur(10px);
@@ -120,6 +128,7 @@ const logoutHandle = async () => {};
     @media (max-width: 768px) {
       transform: translateX(-100%);
       backdrop-filter: blur(10px);
+      background: rgba(var(--bg-color-rgb), 0.4);
       position: fixed;
       z-index: 50;
       display: flex;
@@ -131,7 +140,6 @@ const logoutHandle = async () => {};
       top: 0;
       left: 0;
       gap: 1.5rem;
-      background: rgba(var(--bg-color-rgb), 0.4);
       padding: 0 15px;
       transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1) 0s;
       &.active {
@@ -142,7 +150,7 @@ const logoutHandle = async () => {};
   &__list {
     display: flex;
     align-items: center;
-    gap: 1.2em;
+    gap: 0.2em;
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: flex-start;
@@ -154,28 +162,30 @@ const logoutHandle = async () => {};
       width: 100%;
     }
     .router-link-active {
-      color: var(--main-color);
+      // color: var(--main-color);
+      backdrop-filter: blur(5px);
+      border-radius: 15px;
+      background: rgba(var(--main-color-rgb), 0.2);
     }
   }
   &__link {
-    font-size: clamp(1rem, 5vw, 1.1rem);
+    font-size: clamp(0.5rem, 5vw, 0.8rem);
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
     font-weight: 600;
     transition: color 0.3s ease 0s;
     @media (max-width: 768px) {
       display: inline-block;
       width: 100%;
     }
-    &:hover,
-    &:focus {
-      color: #45c182;
-    }
+    // &:hover,
+    // &:focus {
+    //   color: #45c182;
+    // }
   }
   &__link_logout {
     display: flex;
     // align-items: center;
-    svg {
-      height: 30px;
-    }
     &:hover {
       color: red;
     }

@@ -1,62 +1,49 @@
-<template>
-  <div>
-    <div class="blog">
-      <!-- <div class="blog__container"> -->
-      <!-- <h2>{{ !postsStore.posts.length ? "Постов нет" + "" : "" }}</h2> -->
-      <TransitionGroup tag="div" name="fade" class="blog__container">
-        <PreviewPost
-          v-for="post in postsStore.posts"
-          :key="post.id"
-          :link="'/blog/' + post.slug"
-          :title="post.title"
-          :mdContent="post.mdContent"
-          :rawContent="post.rawContent"
-          :date="post.createdAt"
-          :imgsrc="post.photo || noImage"
-          :isAuth="status == 'authenticated' ? true : false"
-          :slug="post.slug"
-          :post="post"
-          :published="post.published"
-          @updatePublished="updatePublished"
-        />
-      </TransitionGroup>
-      <!-- </div> -->
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { TransitionGroup } from "vue";
-import { Post, usePostsStore } from "~/stores/posts";
+import { usePostsStore } from "~/stores/posts";
 import noImage from "assets/img/no-image.jpg";
-const config = useRuntimeConfig();
+
 useHead({
   title: "greenbabyblog",
   meta: [{ name: "description", content: "зёленый родился блог" }],
 });
 
 const postsStore = usePostsStore();
-const { status, getSession } = useAuth();
-let postsUrl = `${config.public.restApiUrl}/posts`;
 
-if (status.value == "authenticated") {
-  postsUrl = `${config.public.restApiUrl}/posts/all`;
-}
-const { data: posts, error }: any = await useFetch(postsUrl, {
-  headers:
-    status.value == "authenticated"
-      ? {
-          Authorization:
-            "Bearer " + ((await getSession()) as any).user.accessToken,
-        }
-      : {},
-});
+const { data: posts, error }: any = await useFetch("/api/posts", {});
 postsStore.posts = posts.value;
 
-const updatePublished = (post: Post) => {
+const updatePublished = (post: any) => {
   post.published = !post.published;
 };
+
+const user = useUser();
 </script>
+
+<template>
+  <div>
+    <CreatePost v-if="user"></CreatePost>
+    <div class="blog">
+      <TransitionGroup tag="div" name="fade" class="blog__container">
+        <PreviewPost
+          v-for="post in postsStore.posts"
+          :key="post.id"
+          :link="'/blog/' + post.slug"
+          :title="post.title"
+          :mdContent="post.md"
+          :rawContent="post.description"
+          :date="post.createdAt"
+          :imgsrc="post.img || noImage"
+          :isAuth="true"
+          :slug="post.slug"
+          :post="post"
+          :published="post.published"
+          @updatePublished="updatePublished"
+        />
+      </TransitionGroup>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .blog {

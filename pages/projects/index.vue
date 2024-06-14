@@ -1,91 +1,77 @@
-<script lang="ts" setup>
-// @ts-ignore
-import stroycontrol from "@/assets/img/projects/landing-stroycontrol.png";
-// @ts-ignore
-import portfolio from "~/assets/img/projects/landing-portfolio.png";
-// @ts-ignore
-import stroycom from "../assets/img/projects/stroycom-spa.png";
+<script setup lang="ts">
+import { TransitionGroup } from "vue";
+import { useProjectsStore } from "~/stores/projects";
+import noImage from "assets/img/no-image.jpg";
 
-const projects = [
-  {
-    id: 1,
-    img: stroycontrol,
-    imgAlt: 'Лендинг Stroycontrol',
-    link: 'https://greenbabyborn.github.io/landing-stroycontrol/dist/',
-    title: 'Лендинг - Stroycontrol',
-    text: '',
-    git: 'https://github.com/GreenBabyBorn/landing-stroycontrol',
-    date: '22-01-2004',
-    slug: 'stroycom'
-  },
-  {
-    id: 2,
-    img: portfolio,
-    imgAlt: 'лендинг Porfolio',
-    link: 'https://greenbabyborn.github.io/landing-portfolio/dist',
-    title: 'Лендинг - Porfolio',
-    text: '',
-    git: 'https://github.com/GreenBabyBorn/landing-portfolio'
-  },
-  {
-    id: 3,
-    img: stroycontrol,
-    imgAlt: 'Лендинг Stroycontrol',
-    link: 'https://greenbabyborn.github.io/landing-stroycontrol/dist/',
-    title: 'Лендинг - Stroycontrol',
-    text: '',
-    git: 'https://github.com/GreenBabyBorn/landing-stroycontrol'
-  }
-] 
+useHead({
+  title: "greenbabyblog",
+  meta: [{ name: "description", content: "зёленый родился блог" }],
+});
 
-const { data } = await useFetch('/api/projects');
-console.log(data.value)
+const projectsStore = useProjectsStore();
+
+const { data: projects, error }: any = await useFetch("/api/projects", {});
+projectsStore.projects = projects.value;
+
+const updatePublished = (project: any) => {
+  project.published = !project.published;
+};
+
+const user = useUser();
 </script>
 
 <template>
-  <div class="projects">
-    <div class="projects__container">
-      <PortfolioProject
-      v-for="proj in projects"
-      :key="proj.id"
-        class="portfolio__project"
-        :img-alt="proj.imgAlt"
-        :img-src="proj.img"
-        :link="proj.link"
-        :text="proj.title"
-        :git="proj.git"
-        :date="proj.date"
-      ></PortfolioProject>
-      <!-- <PortfolioProject
-        class="portfolio__project"
-        img-alt="лендинг Porfolio"
-        :imgsrc="portfolio"
-        proj-link="https://greenbabyborn.github.io/landing-portfolio/dist"
-        proj-text="Лендинг - Portfolio"
-        proj-git="https://github.com/GreenBabyBorn/landing-portfolio"
-      ></PortfolioProject>
-      <PortfolioProject
-        class="portfolio__project"
-        img-alt="SPA StroyCom"
-        :imgsrc="stroycom"
-        proj-link="https://stroycom.greenbabyborn.ru"
-        proj-text="SPA - StroyCom"
-        proj-git="https://github.com/GreenBabyBorn/stroycompany-vue-laravel"
-      ></PortfolioProject> -->
+  <div>
+    <CreateProject v-if="user"></CreateProject>
+    <div class="blog">
+      <TransitionGroup tag="div" name="fade" class="blog__container">
+        <PortfolioProject
+          v-for="project in projectsStore.projects"
+          :key="project.id"
+          :title="project.title"
+          :link="project.slug"
+          :date="project.createdAt"
+          :imgSrc="project.img || noImage"
+          :text="project.content"
+          :git="project.git"
+          :slug="project.slug"
+          :published="project.published"
+          :project="project"
+          @updatePublished="updatePublished"
+        />
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
-
-
-<style lang="scss" scoped>
-.projects{
-  margin-bottom: 3rem;
-  &__container{
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
-}  
+<style scoped lang="scss">
+.blog {
+  font-size: 1rem;
+  margin: 50px 0px 50px 0px;
+  :deep(.blog__container) {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    position: relative;
+  }
+}
+/* 1. declare transition */
+.fade-move,
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 
+/* 2. declare enter from and leave to state */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+// .fade-leave-active {
+//   position: absolute;
+// }
 </style>

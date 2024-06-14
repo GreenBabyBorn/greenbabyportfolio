@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <NuxtLayout>
     <NuxtPage />
@@ -5,12 +7,7 @@
   <AppNotification> </AppNotification>
 </template>
 
-<script setup lang="ts"></script>
-
 <style lang="scss">
-@use "@/assets/scss/null" as *;
-@use "@/assets/scss/style" as *;
-@use "@/assets/scss/markdown" as *;
 .page-enter-active,
 .page-leave-active {
   transition: all 0.2s;

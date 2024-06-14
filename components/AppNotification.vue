@@ -34,7 +34,7 @@ const notificationStore = useNotificationStore();
 <style scoped lang="scss">
 .notification {
   position: fixed;
-  top: 0;
+  bottom: 0;
   right: 0;
   z-index: 55;
   margin: 20px;
@@ -46,7 +46,7 @@ const notificationStore = useNotificationStore();
   }
   &__item {
     padding: 1rem;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     display: grid;
     grid-template-areas: "title remove" "text remove";
     align-items: center;
@@ -56,7 +56,8 @@ const notificationStore = useNotificationStore();
     border-radius: 15px;
   }
   &__item_success {
-    background: #21ff8c4a;
+    // background: #21ff8c4a;
+    border: 2px solid #21ff8c4a;
   }
   &__title {
     font-size: 1rem;
