@@ -150,8 +150,9 @@ const logoutHandle = async () => {
   &__list {
     display: flex;
     align-items: center;
-    gap: 0.2em;
+    gap: 0.2rem;
     @media (max-width: 768px) {
+      gap: 0.5rem;
       flex-direction: column;
       align-items: flex-start;
     }
@@ -178,10 +179,10 @@ const logoutHandle = async () => {
       display: inline-block;
       width: 100%;
     }
-    // &:hover,
-    // &:focus {
-    //   color: #45c182;
-    // }
+     &:hover,
+     &:focus {
+       color: #45c182;
+     } 
   }
   &__link_logout {
     display: flex;

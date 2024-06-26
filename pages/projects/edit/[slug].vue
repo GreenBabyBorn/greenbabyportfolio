@@ -1,5 +1,7 @@
 <template>
-    
+    <div class="">
+      фвафв
+    </div>
   </template>
   
   <script setup lang="ts">

@@ -1,0 +1,25 @@
+services:
+  nuxt_green:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres_rce
+    restart: always
+
+  postgres_green:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: green
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: rce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data-green:/var/lib/postgresql/data
+
+volumes:
+  postgres-data-green:

@@ -2,22 +2,33 @@
 import { TransitionGroup } from "vue";
 import { useProjectsStore } from "~/stores/projects";
 import noImage from "assets/img/no-image.jpg";
+import { storeToRefs } from "pinia";
 
 useHead({
   title: "greenbabyblog",
   meta: [{ name: "description", content: "зёленый родился блог" }],
 });
 
-const projectsStore = useProjectsStore();
+const user = useUser();
+const projectStore = useProjectsStore();
+const { getProjects } = projectStore
 
-const { data: projects, error }: any = await useFetch("/api/projects", {});
-projectsStore.projects = projects.value;
+const { projects } = storeToRefs(projectStore);
+await getProjects();
+
+
+// const { data: projects } = await useFetch("/api/projects");
+// projectsStore.projects = projects.value as any;
+// await useAsyncData('projects', () => projectsStore.getProjects())
+
+// onServerPrefetch(async () => await projectsStore.getProjects());
+// onBeforeMount(async () => {
+//     await projectsStore.getProjects();
+// });
 
 const updatePublished = (project: any) => {
   project.published = !project.published;
 };
-
-const user = useUser();
 </script>
 
 <template>
@@ -26,7 +37,7 @@ const user = useUser();
     <div class="blog">
       <TransitionGroup tag="div" name="fade" class="blog__container">
         <PortfolioProject
-          v-for="project in projectsStore.projects"
+          v-for="project in projects"
           :key="project.id"
           :title="project.title"
           :link="project.slug"

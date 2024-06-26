@@ -10,7 +10,7 @@ useHead({
 
 const postsStore = usePostsStore();
 
-const { data: posts, error }: any = await useFetch("/api/posts", {});
+const { data: posts, error }: any = await useFetch("/api/posts");
 postsStore.posts = posts.value;
 
 const updatePublished = (post: any) => {

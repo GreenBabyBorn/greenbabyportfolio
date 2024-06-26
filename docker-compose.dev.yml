@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: green
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: greenbabyportfolio
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data-green:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: qwe@qwe.ru
+      PGADMIN_DEFAULT_PASSWORD: 123123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data-green:

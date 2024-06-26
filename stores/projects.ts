@@ -1,11 +1,31 @@
-import type { Project } from "@prisma/client";
 import { defineStore } from "pinia";
+type Project = {
+  id: number;
+  title: string;
+  content: string | null;
+  published: boolean;
+  img: string;
+  git: string;
+  link: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export const useProjectsStore = defineStore("projects", {
   state: () => ({
-    projects: [] as Project[],
+    projects: ref<Project[]>([]),
   }),
   actions: {
+    async getProjects() {
+      try {
+        const { data } = await useFetch("/api/projects");
+        if (data.value) this.projects = data.value;
+        // return this.projects;
+      } catch (e) {
+        console.log(e);
+      }
+    },
     removeProject(project: Project) {
       this.projects = this.projects.filter((el) => {
         return el !== project;

@@ -8,7 +8,8 @@ const adapter = new PrismaAdapter(prisma.session, prisma.user);
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     attributes: {
-      secure: !import.meta.dev,
+      // secure: !import.meta.dev,
+      secure: false,
     },
   },
   getUserAttributes: (attributes) => {
@@ -18,6 +19,7 @@ export const lucia = new Lucia(adapter, {
     };
   },
 });
+
 
 declare module "lucia" {
   interface Register {

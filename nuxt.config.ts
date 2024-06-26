@@ -16,12 +16,12 @@ export default defineNuxtConfig({
         { name: "author", content: "greenbabyborn" },
       ],
       link: [
-        {
-          rel: "icon",
-          type: "image/png",
-          sizes: "192x192",
-          href: "/favicon-192x192.png",
-        },
+        // {
+        //   rel: "icon",
+        //   type: "image/png",
+        //   sizes: "192x192",
+        //   href: "/favicon-192x192.png",
+        // },
         {
           rel: "icon",
           type: "image/png",
@@ -52,13 +52,13 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
-    "nuxt-yandex-metrika",
+    // "nuxt-yandex-metrika",
     "nuxt-file-storage",
     "@vee-validate/nuxt",
   ],
 
-  yandexMetrika: {
-    id: "94783808",
+  // yandexMetrika: {
+    // id: "94783808",
     // debug: process.env.NODE_ENV !== "production",
     // delay: 0,
     // cdn: false,
@@ -66,7 +66,7 @@ export default defineNuxtConfig({
     // options: {
     //  webvisor: true
     // },
-  },
+  // },
 
   colorMode: {
     preference: "system",

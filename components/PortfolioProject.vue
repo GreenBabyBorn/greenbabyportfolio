@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useNotificationStore } from "~/stores/notifications";
 import { useProjectsStore } from "~/stores/projects";
+
 interface Props {
   title: string;
   link: string;
-  date: string;
-  text: string;
+  date: string | null;
+  text: string | null;
   git: string;
   imgSrc: string;
   imgAlt?: string;
@@ -38,7 +39,7 @@ const deleteProject = async () => {
 };
 
 const handleEdit = () => {
-  useRouter().push({ path: "/blog/edit/" + props.slug });
+  navigateTo("/projects/edit/" + props.slug);
 };
 
 const handlePublished = async () => {
@@ -69,16 +70,19 @@ const handlePublished = async () => {
 
 <template>
   <div class="project">
-    <a :href="props.link" target="_blank" class="project__url">
+    <div :href="props.link" class="project__url">
       <div class="project__img">
         <img :src="props.imgSrc" :alt="props.imgAlt" />
       </div>
-      <div class="project__info">Подробнее</div>
-    </a>
-    <div class="project__description">
-      <span class="project__text">{{ props.title }}</span>
-      <p>{{ props.text }}</p>
-      <a target="_blank" class="project__github" :href="props.git">github</a>
+      <div class="project__info">Результат</div>
+
+      <div class="project__description">
+        <span class="project__text">{{ props.title }}</span>
+        <p>{{ props.text }}</p>
+        <NuxtLink :external="true" class="project__github" :to="props.git"
+          >github</NuxtLink
+        >
+      </div>
     </div>
 
     <div v-if="user" class="project__manage">
@@ -159,10 +163,18 @@ const handlePublished = async () => {
     font-size: 20px;
   }
   &__description {
+    position: absolute;
+    z-index: 50;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
+    flex-direction: column;
+    padding: 1rem;
     gap: 1rem;
     justify-content: space-between;
     flex-wrap: wrap;
+    background: linear-gradient(180deg, transparent, var(--bg-color));
   }
   &__text {
     font-size: 1.2rem;

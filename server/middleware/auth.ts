@@ -1,6 +1,6 @@
 import { verifyRequestOrigin } from "lucia";
-
 import type { User, Session } from "lucia";
+import { lucia } from "../utils/auth";
 
 export default defineEventHandler(async (event) => {
   if (event.node.req.method !== "GET") {
