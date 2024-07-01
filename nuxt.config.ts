@@ -52,21 +52,21 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
-    // "nuxt-yandex-metrika",
+    "nuxt-yandex-metrika",
     "nuxt-file-storage",
     "@vee-validate/nuxt",
   ],
 
-  // yandexMetrika: {
-    // id: "94783808",
-    // debug: process.env.NODE_ENV !== "production",
-    // delay: 0,
-    // cdn: false,
-    // verification: null, // Verification in Yandex Webmaster
-    // options: {
-    //  webvisor: true
-    // },
-  // },
+  yandexMetrika: {
+    id: "94783808",
+    debug: process.env.NODE_ENV !== "production",
+    delay: 0,
+    cdn: false,
+    verification: null, // Verification in Yandex Webmaster
+    options: {
+     webvisor: true
+    },
+  },
 
   colorMode: {
     preference: "system",
