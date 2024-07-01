@@ -1,6 +1,6 @@
 FROM node:21-bookworm
 
-WORKDIR /codechick
+WORKDIR /green
 
 # RUN npm config set strict-ssl false
 COPY --link package*.json ./

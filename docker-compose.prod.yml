@@ -8,6 +8,8 @@ services:
     depends_on:
       - postgres_rce
     restart: always
+    volumes:
+      - ./uploaded:/green/uploaded
 
   postgres_green:
     image: postgres

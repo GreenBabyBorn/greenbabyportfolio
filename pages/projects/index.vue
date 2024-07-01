@@ -40,7 +40,7 @@ const updatePublished = (project: any) => {
           v-for="project in projects"
           :key="project.id"
           :title="project.title"
-          :link="project.slug"
+          :link="project.link"
           :date="project.createdAt"
           :imgSrc="project.img || noImage"
           :text="project.content"
