@@ -6,7 +6,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - postgres_rce
+      - postgres_green
     restart: always
     volumes:
       - ./uploaded:/green/uploaded
@@ -17,7 +17,7 @@ services:
     environment:
       POSTGRES_USER: green
       POSTGRES_PASSWORD: 123123
-      POSTGRES_DB: rce
+      POSTGRES_DB: greenbabyportfolio
     ports:
       - "5432:5432"
     volumes:
