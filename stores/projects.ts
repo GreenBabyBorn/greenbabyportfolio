@@ -21,7 +21,6 @@ export const useProjectsStore = defineStore("projects", {
       try {
         const { data } = await useFetch("/api/projects");
         if (data.value) this.projects = data.value;
-        // return this.projects;
       } catch (e) {
         console.log(e);
       }

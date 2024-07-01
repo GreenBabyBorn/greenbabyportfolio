@@ -18,7 +18,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const notificationStore = useNotificationStore();
-const projectsStore = useProjectsStore();
+const {removeProject} = useProjectsStore();
 const emits = defineEmits(["updatePublished"]);
 
 const user = useUser();
@@ -30,7 +30,7 @@ const deleteProject = async () => {
       slug: props.slug,
     },
   });
-  projectsStore.removeProject(props.project as any);
+  removeProject(props.project as any);
   notificationStore.pushNotification({
     title: "Успешно!",
     status: true,
@@ -70,18 +70,26 @@ const handlePublished = async () => {
 
 <template>
   <div class="project">
-    <div :href="props.link" class="project__url">
+    <div class="project__body">
       <div class="project__img">
         <img :src="props.imgSrc" :alt="props.imgAlt" />
       </div>
       <div class="project__info">Результат</div>
 
       <div class="project__description">
-        <span class="project__text">{{ props.title }}</span>
+        <div class="project__description-left">
+          <span class="project__text">{{ props.title }}</span>
         <p>{{ props.text }}</p>
         <NuxtLink :external="true" class="project__github" :to="props.git"
           >github</NuxtLink
         >
+        </div>
+       
+        <div class="project__description-right">
+          <NuxtLink title="Дэмо" :external="true" class="project__demo" :to="props.link"
+          ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg></NuxtLink
+        >
+        </div>
       </div>
     </div>
 
@@ -125,17 +133,9 @@ const handlePublished = async () => {
     backdrop-filter: blur(10px);
     background: rgba(22, 22, 22, 0.599);
   }
-  &__url {
-    &:hover img {
-      filter: brightness(0.5);
-    }
-    &:hover .project__info {
-      font-size: 1.2rem;
-      opacity: 1;
-    }
+  &__body {
     display: inline-block;
     position: relative;
-
     z-index: 1;
   }
   &__img {
@@ -162,19 +162,29 @@ const handlePublished = async () => {
     z-index: 5;
     font-size: 20px;
   }
+  &__description-left  {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  &__description-right  {
+
+  }
   &__description {
+    padding: 1rem;
     position: absolute;
     z-index: 50;
     bottom: 0;
     left: 0;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-    justify-content: space-between;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     background: linear-gradient(180deg, transparent, var(--bg-color));
+    backdrop-filter: blur(2px);
   }
   &__text {
     font-size: 1.2rem;

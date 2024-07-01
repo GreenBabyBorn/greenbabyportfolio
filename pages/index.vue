@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useProjectsStore } from "~/stores/projects";
+import { storeToRefs } from "pinia";
+
 useHead({
   title: "greenbabyborn",
   meta: [{ name: "yandex-verification", content: "7bfa34f9ef0d1d78" }],
@@ -6,7 +9,17 @@ useHead({
 
 let arrowHidden = isScroll();
 
-const { data: projects } = await useFetch("/api/projects");
+// const { data: projects } = await useFetch("/api/projects");
+
+const projectStore = useProjectsStore();
+const { getProjects } = projectStore;
+
+const { projects } = storeToRefs(projectStore);
+await getProjects();
+
+const updatePublished = (project: any) => {
+  project.published = !project.published;
+};
 </script>
 
 <template>
@@ -114,6 +127,8 @@ const { data: projects } = await useFetch("/api/projects");
             :git="project.git"
             :slug="project.slug"
             :published="project.published"
+            :project="project"
+            @updatePublished="updatePublished"
           />
         </div>
       </div>
