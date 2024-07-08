@@ -34,19 +34,13 @@ const parser = new Markdown({
 });
 const mdContent = parser.render(post.value?.md);
 
-useHead({
+
+useSeoMeta({
   title: `greenbabypost - ${post.value.title}`,
-  meta: [
-    { property: "og:type", content: "article" },
-    { property: "og:title", content: post.value.title },
-    { property: "og:description", content: post.value.rawContent },
-    { property: "og:image", content: post.value.photo },
-    { name: "description", content: "зёленый родился блог" },
-    {
-      name: "keywords",
-      content: `зеленый ребенок родился, greenbabyborn, зеленыйребенокродился, гринбейбиборн, green baby born, зеленый блог, блог, greenbabypost, ${post.value.title}`,
-    },
-  ],
+  ogTitle: post.value.title ,
+  description: "зёленый блог",
+  ogDescription: post.value.rawContent,
+  ogImage: post.value.photo,
 });
 </script>
 

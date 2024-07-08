@@ -12,7 +12,9 @@ async function main() {
       id: userId,
       password: hashedPassword,
     },
-    update: {},
+    update: {
+      password: hashedPassword,
+    },
   });
 }
 main()

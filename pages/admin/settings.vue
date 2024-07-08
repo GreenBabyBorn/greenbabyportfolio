@@ -12,17 +12,14 @@ import {
   useFieldValue,
 } from "vee-validate";
 
-let password = ref("");
+
 const createPasswordFormSchema = {
   oldPassword(value: string) {
     if (!value) return "без пароля никак";
-    if (value.length < 8) return "нужно больше 8 символов";
-    password.value = value;
     return true;
   },
   newPassword(value: string) {
     if (!value) return "нужно убедиться что всё хорошо";
-    if (password.value !== value) return "не совпадают(";
     return true;
   },
 };
@@ -52,17 +49,42 @@ import { useNotificationStore } from "~/stores/notifications";
 
 const notificationStore = useNotificationStore();
 
-const changePassword = () => {
-  notificationStore.pushNotification({
-    title: "Пароль изменен",
-    status: true,
-    text: "Нужно заново авторизоваться",
-  });
-  resetForm();
-  logoutHandle();
+const user = useUser();
+
+const changePassword = async () => {
+  try {
+  const res =  await $fetch("/api/auth/user", {
+      method: "PATCH",
+      body: {
+        username: user.value.username,
+        password: oldPassword.value,
+        newPassword: newPassword.value,
+      },
+    });
+    console.log('Data:', res)
+    notificationStore.pushNotification({
+      title: "Пароль изменен",
+      status: true,
+      text: "Нужно заново авторизоваться",
+    });
+    resetForm();
+    logoutHandle();
+  } catch (e) {
+    setErrors({
+      oldPassword: "Неверный пароль",
+    });
+    console.log(e)
+  }
+  
 };
 
-const logoutHandle = async () => {};
+const logoutHandle = async () => {
+  await $fetch("/api/auth/logout", {
+    method: "POST",
+  });
+  navigateTo("/admin/login");
+  user.value = "";
+};
 </script>
 
 <template>

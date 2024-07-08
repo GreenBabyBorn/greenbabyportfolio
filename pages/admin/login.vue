@@ -19,22 +19,22 @@ import {
 const loginFormSchema = {
   username(value: string) {
     if (!value) {
-      return "❌ мало букав";
+      return "мало букав";
     }
     if (value.length > 10) {
-      return "❌ многа букав";
+      return "многа букав";
     }
     return true;
   },
   password(value: string) {
     if (!value) {
-      return "❌ без пароля никак";
+      return " без пароля никак";
     }
     return true;
   },
 };
 
-const { errors, defineField, meta, validate, setErrors } = useForm({
+const { errors, defineField, meta, validate, setErrors  } = useForm({
   validationSchema: loginFormSchema,
 
   initialValues: {
@@ -57,8 +57,9 @@ async function login(e: Event) {
         password: password.value,
       },
     });
-    await navigateTo("/");
+    navigateTo("/");
   } catch (err: any) {
+    setErrors({username: 'Что-то не так', password: 'Не повезло('});
     error.value = err.data?.message ?? null;
   }
 }
@@ -76,7 +77,7 @@ async function login(e: Event) {
             name="username"
             type="text"
             placeholder="логин"
-            success-message="✔️ вроде, всё правильно"
+            success-message="вроде, всё правильно"
             :maxlength="10"
             autofocus
           />
@@ -86,7 +87,7 @@ async function login(e: Event) {
             name="password"
             type="password"
             placeholder="пароль"
-            success-message="✔️ надеюсь не ошибся"
+            success-message="надеюсь не ошибся"
           />
           <!-- <span>{{ errors.password }}</span> -->
           <!-- <button @click.prevent="logout">выйти</button> -->

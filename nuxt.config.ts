@@ -2,6 +2,16 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   css: ["~/assets/scss/main.scss"],
+  routeRules: {
+    "/admin/**": {},
+  },
+  sitemap: {
+    sources: ["/api/posts/urls"],
+    xsl: false,
+  },
+  site: {
+    url: "https://greenbabyborn.ru",
+  },
 
   app: {
     rootId: "green",
@@ -11,7 +21,7 @@ export default defineNuxtConfig({
         {
           name: "keywords",
           content:
-            "зеленый ребенок родился, greenbabyborn, зеленыйребенокродился, гринбейбиборн, green baby born, зеленый блог",
+            "зеленый ребенок родился, greenbabyborn, зеленыйребенокродился, гринбейбиборн, green baby born, зеленый блог, ivan green, vue developer, nuxt developer, fullstack, javascript, typescript",
         },
         { name: "author", content: "greenbabyborn" },
       ],
@@ -55,6 +65,7 @@ export default defineNuxtConfig({
     "nuxt-yandex-metrika",
     "nuxt-file-storage",
     "@vee-validate/nuxt",
+    "@nuxtjs/sitemap",
   ],
 
   yandexMetrika: {
@@ -64,7 +75,7 @@ export default defineNuxtConfig({
     cdn: false,
     verification: null, // Verification in Yandex Webmaster
     options: {
-     webvisor: true
+      webvisor: true,
     },
   },
 
@@ -73,4 +84,6 @@ export default defineNuxtConfig({
     fallback: "light",
     storageKey: "theme",
   },
+
+  compatibilityDate: "2024-07-08",
 });

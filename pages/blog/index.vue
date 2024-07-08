@@ -24,7 +24,9 @@ const user = useUser();
   <div>
     <CreatePost v-if="user"></CreatePost>
     <div class="blog">
+      
       <TransitionGroup tag="div" name="fade" class="blog__container">
+        <h1 class="blog__empty" v-if="!postsStore.posts?.length">Постов пока нет..</h1>
         <PreviewPost
           v-for="post in postsStore.posts"
           :key="post.id"
@@ -54,6 +56,13 @@ const user = useUser();
     flex-direction: column;
     gap: 80px;
     position: relative;
+  }
+  &__empty  {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+
   }
 }
 /* 1. declare transition */

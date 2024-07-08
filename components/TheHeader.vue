@@ -29,7 +29,7 @@ const logoutHandle = async () => {
     <div class="header__container">
       <div class="header__menu menu">
         <nav :class="{ active: stateBurger }" class="menu__body">
-          <!-- <ul @click="handleLink($event)" class="menu__list"> -->
+        
           <ul class="menu__list">
             <li class="menu__item">
               <NuxtLink @click="closeMenu" class="menu__link" to="/"
@@ -46,11 +46,6 @@ const logoutHandle = async () => {
                 >Проекты</NuxtLink
               >
             </li>
-            <!-- <li v-if="user" class="menu__item">
-              <NuxtLink @click="closeMenu" class="menu__link" to="/admin"
-                >Дашборд</NuxtLink
-              >
-            </li> -->
             <li v-if="user" class="menu__item">
               <NuxtLink
                 @click="closeMenu"
